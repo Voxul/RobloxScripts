@@ -1,3 +1,4 @@
+local getgenv = getgenv or getfenv
 
 getgenv().disableBarriers = true
 getgenv().hazardCollision = true
@@ -57,10 +58,10 @@ if getgenv().disableBarriers then
 	workspace.Map.DragonDepths:WaitForChild("Lava").CanTouch = false
 	workspace.Map.DragonDepths.Lava.CanCollide = getgenv().hazardCollision
 	print("Disabled Lava")
-	
+
 	workspace.Map.OriginOffice:WaitForChild("Antiaccess").CanTouch = false
 	print("Disabled Antiaccess")
-	
+
 	workspace.Map.AntiUnderMap:ClearAllChildren()
 	print("Cleared AntiUnderMap")
 end
@@ -72,16 +73,16 @@ if getgenv().itemVacEnabled then
 			Events.Item:FireServer(c.Handle)
 		end
 	end)
-	
+
 	if getgenv().itemVacWaitForBus then
 		if workspace:FindFirstChild("Lobby") then
 			print("Waiting for bus")
 			workspace.Lobby.AncestryChanged:Wait()
 		end
 	elseif getgenv().itemVacHidePlayer then
-		HumanoidRootPart.CFrame += Vector3.new(0, 30, 0)
+		HumanoidRootPart.CFrame += Vector3.new(0, 40, 0)
 		local cachedCFrame = HumanoidRootPart.CFrame
-		
+
 		local osS = os.clock()
 		while os.clock()-osS < 0.1 do
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
@@ -90,27 +91,27 @@ if getgenv().itemVacEnabled then
 		end
 
 		HumanoidRootPart.Anchored = true
-		
+
 		task.delay(1+getDataPing(), function()
 			HumanoidRootPart.Anchored = false
 			if workspace:FindFirstChild("Lobby") then
-				HumanoidRootPart.CFrame = cachedCFrame - Vector3.new(0, 30, 0)
+				HumanoidRootPart.CFrame = cachedCFrame - Vector3.new(0, 40, 0)
 			end
 		end)
 	end
-	
+
 	local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
 	print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
-	
+
 	-- Hold our ground!
 	if doBruteForcePickup then
 		HumanoidRootPart.Anchored = true
 	end
-	
+
 	for _,v in workspace.Items:GetChildren() do
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			Events.Item:FireServer(v.Handle)
-			
+
 			if doBruteForcePickup then 
 				v.Handle.Massless = true
 				v.Handle.Anchored = false 
@@ -132,19 +133,19 @@ if getgenv().safetyHeal then
 	Humanoid.HealthChanged:Connect(function(health)
 		if debounce then return end
 		debounce = true
-		
+
 		if health > getgenv().healthLow then return end
-		
+
 		for _,v in LocalPlr.Backpack:GetChildren() do
 			if v:IsA("Tool") and table.find(healingItems, v.Name) then
 				Humanoid:EquipTool(v)
 				v:Activate()
-				
+
 				task.wait(getDataPing()+0.05)
 				if Humanoid.Health >= getgenv().healthOk then break end
 			end
 		end
-		
+
 		debounce = false
 	end)
 end
@@ -154,7 +155,7 @@ if getgenv().bombBus then
 		print("Waiting for Bus")
 		workspace.Lobby.AncestryChanged:Wait()
 	end
-	
+
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
 			Humanoid:EquipTool(v)
@@ -176,39 +177,46 @@ if getgenv().permaTruePower then
 		if v:IsA("Tool") and v.Name == "True Power" then
 			if firstTruePower then
 				print("2 True Powers found!")
-				
+
 				Humanoid:EquipTool(firstTruePower)
 				firstTruePower:Activate()
 				task.wait()
 				Humanoid:EquipTool(v)
 				v:Activate()
-				
+
 				task.wait(5.5)
 				break
 			end
-			
+
 			firstTruePower = v
 		end
 	end
 end
 
 if getgenv().instantBusJump then
+	task.wait(0.2)
 	Events.BusJumping:FireServer()
-	
+
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
 		rayParam.FilterDescendantsInstances = {workspace.Terrain}
 		rayParam.FilterType = Enum.RaycastFilterType.Include
 		
-		local rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-300,0), rayParam)
-		local landingPos
+		local rayCast
+		for i = 1, 3 do
+			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-300,0), rayParam)
+			if rayCast then break end
+			task.wait()
+		end
 		
+		local landingPos
 		if rayCast then
 			landingPos = rayCast.Position + Vector3.new(0,2.5,0)
 		else
-			warn("Failed to get landing spot")
+			warn("Failed to get landing spot, falling back to set")
+			landingPos = HumanoidRootPart.Position - Vector3.new(0,100,0)
 		end
-		
+
 		local jumpTimeoutStart = os.clock()
 		while landingPos and os.clock()-jumpTimeoutStart < 2 and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild(gloveName) do
 			HumanoidRootPart.Position = landingPos
