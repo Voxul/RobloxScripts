@@ -207,7 +207,7 @@ if getgenv().instantBusJump then
 	end
 	
 	Events.BusJumping:FireServer()
-	task.wait(getDataPing() + 0.05)
+	task.wait()
 
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
