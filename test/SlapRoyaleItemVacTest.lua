@@ -173,14 +173,13 @@ local gloveName = LocalPlr.Glove.Value
 
 if getgenv().permaTruePower then
 	local firstTruePower = nil
-	for _,v in LocalPlr:GetChildren() do
+	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "True Power" then
 			if firstTruePower then
 				print("2 True Powers found!")
 
 				Humanoid:EquipTool(firstTruePower)
 				firstTruePower:Activate()
-				task.wait()
 				Humanoid:EquipTool(v)
 				v:Activate()
 
