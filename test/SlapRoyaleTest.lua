@@ -19,7 +19,7 @@ getgenv().safetyHeal = true
 getgenv().healthLow = 30
 getgenv().healthOk = 80
 
-getgenv().killAll = false
+getgenv().killAll = true
 getgenv().killAllStudsPerSecond = 420
 
 if not game:IsLoaded() then game.Loaded:Wait() end
