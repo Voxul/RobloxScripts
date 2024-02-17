@@ -92,7 +92,7 @@ if getgenv().itemVacEnabled then
 
 		HumanoidRootPart.Anchored = true
 
-		task.delay(0.5+getDataPing(), function()
+		task.delay(0.8+getDataPing(), function()
 			HumanoidRootPart.Anchored = false
 			if workspace:FindFirstChild("Lobby") then
 				HumanoidRootPart.CFrame = cachedCFrame - Vector3.new(0, 40, 0)
