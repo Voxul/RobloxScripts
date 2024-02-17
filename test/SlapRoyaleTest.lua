@@ -122,6 +122,13 @@ if getgenv().itemVacEnabled then
 				v.Handle.Anchored = false 
 				Humanoid:EquipTool(v)
 			end
+			
+			task.defer(function()
+				v.Equipped:Connect(function()
+					v:Activate()
+					Humanoid:UnequipTools()
+				end)
+			end)
 		end
 	end
 	Humanoid:UnequipTools()
