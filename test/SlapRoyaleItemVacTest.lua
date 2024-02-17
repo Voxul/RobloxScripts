@@ -80,24 +80,16 @@ if getgenv().itemVacEnabled then
 			workspace.Lobby.AncestryChanged:Wait()
 		end
 	elseif getgenv().itemVacHidePlayer then
-		HumanoidRootPart.CFrame += Vector3.new(0, 40, 0)
 		local cachedCFrame = HumanoidRootPart.CFrame
 
 		task.delay(0.6, function()
-			local osS = os.clock()
-			while os.clock()-osS < 0.1 do
-				HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-				HumanoidRootPart.CFrame = cachedCFrame
-				task.wait()
-			end
-
-			HumanoidRootPart.Anchored = true
+			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+			HumanoidRootPart.CFrame += Vector3.new(0, 40, 0)
 		end)
 
 		task.delay(0.8+getDataPing(), function()
-			HumanoidRootPart.Anchored = false
 			if workspace:FindFirstChild("Lobby") then
-				HumanoidRootPart.CFrame = cachedCFrame - Vector3.new(0, 40, 0)
+				HumanoidRootPart.CFrame = cachedCFrame
 			end
 		end)
 	end
