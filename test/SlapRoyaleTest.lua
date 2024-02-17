@@ -95,10 +95,10 @@ if getgenv().itemVacEnabled then
 	elseif getgenv().itemVacHidePlayer then
 		local cachedCFrame = HumanoidRootPart.CFrame
 
-		task.delay(0.5 + getDataPing(), function()
+		task.delay(0.4 + getDataPing(), function()
 			pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
 			
-			task.wait(0.3)
+			task.wait(0.4)
 			if workspace:FindFirstChild("Lobby") then
 				pivotModelTo(Character, cachedCFrame, true)
 			end
