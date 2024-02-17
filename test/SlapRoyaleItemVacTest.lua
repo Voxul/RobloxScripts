@@ -224,6 +224,11 @@ if getgenv().instantBusJump then
 		end
 		task.wait(0.2)
 	end
+	
+	task.spawn(function()
+		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
+		LocalPlr.PlayerGui.JumpPrompt:Destroy()
+	end)
 end
 
 if getgenv().usePermaItems then
