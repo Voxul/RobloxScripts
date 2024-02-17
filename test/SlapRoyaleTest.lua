@@ -263,6 +263,8 @@ end
 if not getgenv().killAll then return end
 
 local function canHitChar(char:Model)
+	if not char.Parent then return false end
+	
 	local charHRM:BasePart = char:FindFirstChild("HumanoidRootPart")
 	-- Instance sanity
 	if not charHRM or not char:FindFirstChild("Humanoid") or not char:FindFirstChild("Head") or not char:FindFirstChild("inMatch") or not char:FindFirstChild("Ragdolled") or not char:FindFirstChild("Vulnerable") then 
