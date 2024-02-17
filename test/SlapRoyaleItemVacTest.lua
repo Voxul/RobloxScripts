@@ -20,6 +20,7 @@ getgenv().healthLow = 30
 getgenv().healthOk = 80
 
 getgenv().killAll = false
+getgenv().killAllStudsPerSecond = 420
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
@@ -236,5 +237,109 @@ if getgenv().usePermaItems then
 			Humanoid:EquipTool(v)
 			v:Activate()
 		end
+	end
+end
+
+-- Kill All
+if not getgenv().killAll then return end
+
+local function canHitChar(char:Model)
+	local charHRM:BasePart = char:FindFirstChild("HumanoidRootPart")
+	-- Instance sanity
+	if not charHRM or not char:FindFirstChild("Humanoid") or not char:FindFirstChild("Head") or not char:FindFirstChild("inMatch") or not char:FindFirstChild("Ragdolled") or not char:FindFirstChild("Vulnerable") then 
+		return false 
+	end
+
+	-- Check if they're dead
+	if not char.inMatch.Value or char.Humanoid.Health <= 0 or char:FindFirstChild("Dead") then
+		return false
+	end
+	
+	-- Additional checks
+	if char.Ragdolled.Value or not char.Vulnerable.Value or char:FindFirstChild("Glider") or char.Head.Transparency == 1 then 
+		return false 
+	end
+	
+	-- Position sanity
+	local CHRMPOS = charHRM.Position
+	
+	if math.abs(CHRMPOS.X) > 2000 or math.abs(CHRMPOS.Z) > 2000 or CHRMPOS.Y < - 160 or CHRMPOS.Y > 600 then
+		return false
+	end
+	
+	return true
+end
+
+local function getModelClosestChild(model:Model, position:Vector3)
+	local closestPart, closestMagnitude = nil, nil
+	
+	for _,v in model:GetChildren() do
+		if v:IsA("BasePart") then
+			local magnitude = (v.Position-position).Magnitude
+			if not closestPart or magnitude < closestMagnitude then
+				closestPart = v
+				closestMagnitude = magnitude
+			end
+		end
+	end
+	
+	return closestPart
+end
+
+local function getClosestHittableCharacter(position:Vector3):Model
+	local closest, closestMagnitude = nil, nil
+	
+	for _,plr in Players:GetPlayers() do
+		if plr == LocalPlr then continue end
+		if not plr.Character or not canHitChar(plr.Character) then continue end
+		
+		local magnitude = (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude
+		if not closest or magnitude < closestMagnitude then
+			closest = plr.Character
+			closestMagnitude = magnitude
+		end
+	end
+	
+	return closest, closestMagnitude
+end
+
+task.wait(2)
+print("Initialize kill all")
+
+Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+Humanoid.Seated:Connect(function(active)
+	if active then
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+		Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+	end
+end)
+
+-- Slap Thread
+task.spawn(function()
+	while task.wait() do
+		for _,plr in Players:GetPlayers() do
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and not plr.Character:FindFirstChild("Dead") and (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude < 20 then
+				Events.Slap:FireServer(getModelClosestChild(plr.Character, HumanoidRootPart.Position))
+				Events.Slap:FireServer(plr.Character.HumanoidRootPart)
+			end
+		end
+	end
+end)
+
+local studsPerSecond = getgenv().killAllStudsPerSecond
+while task.wait() and not Character:FindFirstChild("Dead") do
+	local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
+	if not target then continue end
+	
+	local moveToStart = os.clock()
+	local moveToTick = os.clock()
+	
+	while os.clock()-moveToStart < distance/studsPerSecond+getDataPing()+2 and canHitChar(target) and Character:FindFirstChild(gloveName) and not Character:FindFirstChild("Dead") do
+		HumanoidRootPart.CFrame = HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / distance*studsPerSecond)*(os.clock()-moveToTick))
+		HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+		HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+		
+		moveToTick = os.clock()
+		task.wait()
 	end
 end
