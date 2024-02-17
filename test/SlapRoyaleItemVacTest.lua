@@ -193,6 +193,10 @@ if getgenv().permaTruePower then
 end
 
 if getgenv().instantBusJump then
+	while Character.Ragdolled.Value do
+		task.wait()
+	end
+	
 	Events.BusJumping:FireServer()
 
 	if getgenv().teleportToGroundOnBusJump then
