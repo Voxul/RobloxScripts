@@ -334,7 +334,15 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
 	
-	while os.clock()-moveToStart < distance/studsPerSecond+getDataPing()+2 and canHitChar(target) and Character:FindFirstChild(gloveName) and not Character:FindFirstChild("Dead") do
+	while os.clock()-moveToStart < distance/studsPerSecond+getDataPing()+2 and canHitChar(target) and not Character:FindFirstChild("Dead") do
+		if not Character:FindFirstChild(gloveName) then
+			if LocalPlr.Backpack:FindFirstChild(gloveName) then
+				Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
+			else
+				error("Glove missing!")
+			end
+		end	
+		
 		HumanoidRootPart.CFrame = HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / distance*studsPerSecond)*(os.clock()-moveToTick))
 		HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 		HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
