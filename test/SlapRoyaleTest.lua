@@ -299,12 +299,12 @@ local function getModelClosestChild(model:Model, position:Vector3)
 	return closestPart
 end
 
-local function getClosestHittableCharacter(position:Vector3):Model
+local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Model
 	local closest, closestMagnitude = nil, nil
 	
 	for _,plr in Players:GetPlayers() do
 		if plr == LocalPlr then continue end
-		if not plr.Character or not canHitChar(plr.Character) then continue end
+		if plr.Character == ignore or not canHitChar(plr.Character) then continue end
 		
 		local magnitude = (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude
 		if not closest or magnitude < closestMagnitude then
@@ -340,25 +340,36 @@ task.spawn(function()
 end)
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
+
+local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
-	local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-	if not target then continue end
+	if not target then
+		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
+		continue 
+	end
 	
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
 	
-	while os.clock()-moveToStart < distance/studsPerSecond+getDataPing()+2 and canHitChar(target) and not Character:FindFirstChild("Dead") do
+	local ignore = nil
+	while canHitChar(target) and not Character:FindFirstChild("Dead") do
+		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
+			warn("Target timed out!")
+			ignore = target
+		end
+		
 		if not Character:FindFirstChild(gloveName) then
 			if LocalPlr.Backpack:FindFirstChild(gloveName) then
 				Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 			else
 				error("Glove missing!")
 			end
-		end	
+		end
 		
 		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 		
 		moveToTick = os.clock()
 		task.wait()
 	end
+	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position, ignore)
 end
