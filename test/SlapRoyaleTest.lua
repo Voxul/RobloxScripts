@@ -48,6 +48,16 @@ local function getDataPing():number
 	return a
 end
 
+local function pivotModelTo(Model:Model, cFrame:CFrame, removeVelocity:boolean?)
+	Model:PivotTo(cFrame)
+	for _,v in Model:GetDescendants() do
+		if v:IsA("BasePart") then
+			v.AssemblyLinearVelocity = Vector3.zero
+			v.AssemblyAngularVelocity = Vector3.zero
+		end
+	end
+end
+
 -- Disable barriers
 if getgenv().disableBarriers then
 	for _,v:BasePart in workspace.Map.AcidAbnormality:GetChildren() do
@@ -86,14 +96,12 @@ if getgenv().itemVacEnabled then
 		local cachedCFrame = HumanoidRootPart.CFrame
 
 		task.delay(0.6, function()
-			Character:PivotTo(HumanoidRootPart.CFrame + Vector3.new(0, 38, 0))
-			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+			pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
 		end)
 
 		task.delay(0.8+getDataPing(), function()
 			if workspace:FindFirstChild("Lobby") then
-				Character:PivotTo(cachedCFrame)
-				HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+				pivotModelTo(Character, cachedCFrame, true)
 			end
 		end)
 	end
@@ -193,6 +201,7 @@ if getgenv().permaTruePower then
 end
 
 if getgenv().instantBusJump then
+	task.wait(getDataPing() + 0.05)
 	while Character.Ragdolled.Value do
 		task.wait()
 	end
@@ -221,13 +230,12 @@ if getgenv().instantBusJump then
 
 		local jumpTimeoutStart = os.clock()
 		while landingPos and (os.clock()-jumpTimeoutStart < 3 or Character.Ragdolled.Value) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild(gloveName) do
-			Character:PivotTo(landingPos)
-			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+			pivotModelTo(Character, landingPos, true)
 			task.wait()
 		end
-		Character:PivotTo(landingPos)
+		pivotModelTo(Character, landingPos, true)
 		task.wait(getDataPing())
-		Character:PivotTo(landingPos)
+		pivotModelTo(Character, landingPos, true)
 	end
 	
 	task.spawn(function()
@@ -347,9 +355,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end	
 		
-		Character:PivotTo(HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)))
-		HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-		HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 		
 		moveToTick = os.clock()
 		task.wait()
