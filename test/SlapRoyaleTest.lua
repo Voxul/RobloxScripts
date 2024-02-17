@@ -95,7 +95,7 @@ if getgenv().itemVacEnabled then
 	elseif getgenv().itemVacHidePlayer then
 		local cachedCFrame = HumanoidRootPart.CFrame
 
-		task.delay(0.3 + getDataPing(), function()
+		task.delay(0.2 + getDataPing(), function()
 			pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
 			
 			task.wait(0.5)
@@ -197,7 +197,7 @@ if getgenv().permaTruePower then
 				Humanoid:EquipTool(v)
 				v:Activate()
 
-				task.wait(5.5)
+				task.wait(5.2)
 				break
 			end
 
@@ -321,7 +321,7 @@ local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Mode
 	return closest, closestMagnitude
 end
 
-task.wait(8)
+task.wait(15)
 print("Initialize kill all")
 
 Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
