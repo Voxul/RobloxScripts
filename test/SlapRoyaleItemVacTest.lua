@@ -193,7 +193,6 @@ if getgenv().permaTruePower then
 end
 
 if getgenv().instantBusJump then
-	task.wait()
 	Events.BusJumping:FireServer()
 
 	if getgenv().teleportToGroundOnBusJump then
@@ -202,10 +201,10 @@ if getgenv().instantBusJump then
 		rayParam.FilterType = Enum.RaycastFilterType.Include
 		
 		local rayCast
-		for i = 1, 3 do
+		for i = 1, 5 do
 			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
 			if rayCast then break end
-			task.wait(0.02)
+			task.wait(0.01)
 		end
 		
 		local landingPos
