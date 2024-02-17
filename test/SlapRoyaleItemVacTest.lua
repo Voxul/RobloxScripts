@@ -50,9 +50,9 @@ end
 if getgenv().disableBarriers then
 	for _,v:BasePart in workspace.Map.AcidAbnormality:GetChildren() do
 		if v.Name == "Acid" and v.ClassName == "Part" and v:FindFirstChild("TouchInterest") then
-			print("Disabled Acid")
 			v.CanTouch = false
 			v.CanCollide = getgenv().hazardCollision
+			print("Disabled Acid")
 			break
 		end
 	end
@@ -85,11 +85,12 @@ if getgenv().itemVacEnabled then
 
 		task.delay(0.6, function()
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-			HumanoidRootPart.CFrame += Vector3.new(0, 40, 0)
+			HumanoidRootPart.CFrame += Vector3.new(0, 38, 0)
 		end)
 
 		task.delay(0.8+getDataPing(), function()
 			if workspace:FindFirstChild("Lobby") then
+				HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 				HumanoidRootPart.CFrame = cachedCFrame
 			end
 		end)
@@ -262,7 +263,6 @@ local function canHitChar(char:Model)
 	
 	-- Position sanity
 	local CHRMPOS = charHRM.Position
-	
 	if math.abs(CHRMPOS.X) > 2000 or math.abs(CHRMPOS.Z) > 2000 or CHRMPOS.Y < - 160 or CHRMPOS.Y > 600 then
 		return false
 	end
