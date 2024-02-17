@@ -213,7 +213,6 @@ if getgenv().instantBusJump then
 	end
 	
 	Events.BusJumping:FireServer()
-	task.wait()
 
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
@@ -322,7 +321,7 @@ local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Mode
 	return closest, closestMagnitude
 end
 
-task.wait(2)
+task.wait(8)
 print("Initialize kill all")
 
 Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
