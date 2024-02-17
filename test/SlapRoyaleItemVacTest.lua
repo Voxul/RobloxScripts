@@ -225,7 +225,11 @@ if getgenv().instantBusJump then
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			task.wait()
 		end
-		task.wait(0.2)
+		HumanoidRootPart.CFrame = landingPos
+		task.wait(0.1)
+		HumanoidRootPart.CFrame = landingPos
+		task.wait(0.1)
+		HumanoidRootPart.CFrame = landingPos
 	end
 	
 	task.spawn(function()
