@@ -228,9 +228,7 @@ if getgenv().instantBusJump then
 			task.wait()
 		end
 		HumanoidRootPart.CFrame = landingPos
-		task.wait(0.1)
-		HumanoidRootPart.CFrame = landingPos
-		task.wait(0.1)
+		task.wait(0.1 + getDataPing())
 		HumanoidRootPart.CFrame = landingPos
 	end
 	
