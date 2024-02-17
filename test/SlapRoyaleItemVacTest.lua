@@ -83,7 +83,7 @@ if getgenv().itemVacEnabled then
 		HumanoidRootPart.CFrame += Vector3.new(0, 40, 0)
 		local cachedCFrame = HumanoidRootPart.CFrame
 
-		task.spawn(function()
+		task.delay(0.3, function()
 			local osS = os.clock()
 			while os.clock()-osS < 0.1 do
 				HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
