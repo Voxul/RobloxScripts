@@ -1,4 +1,4 @@
-if game.PlaceId ~= 9431156611 then return end
+if game.PlaceId ~= 9431156611 then warn("Not Slap Royale!") return end
 local getgenv = getgenv or getfenv
 getgenv().disableBarriers = true
 getgenv().hazardCollision = true
@@ -97,7 +97,7 @@ if getgenv().itemVacEnabled then
 
 		task.delay(0.2 + getDataPing(), function()
 			pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
-			
+
 			task.wait(0.5)
 			if workspace:FindFirstChild("Lobby") then
 				pivotModelTo(Character, cachedCFrame, true)
@@ -122,7 +122,7 @@ if getgenv().itemVacEnabled then
 				v.Handle.Anchored = false 
 				Humanoid:EquipTool(v)
 			end
-			
+
 			task.defer(function()
 				v.Equipped:Connect(function()
 					v:Activate()
@@ -185,7 +185,7 @@ local gloveName = LocalPlr.Glove.Value
 
 if getgenv().permaTruePower then
 	task.wait()
-	
+
 	local firstTruePower = nil
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "True Power" then
@@ -211,21 +211,21 @@ if getgenv().instantBusJump then
 	while Character.Ragdolled.Value do
 		task.wait()
 	end
-	
+
 	Events.BusJumping:FireServer()
 
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
 		rayParam.FilterDescendantsInstances = {workspace.Terrain}
 		rayParam.FilterType = Enum.RaycastFilterType.Include
-		
+
 		local rayCast
 		for i = 1, 10 do
 			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
 			if rayCast then break end
 			task.wait(0.01)
 		end
-		
+
 		local landingPos
 		if rayCast then
 			landingPos = CFrame.new(rayCast.Position + Vector3.new(0,2.5,0))
@@ -243,7 +243,7 @@ if getgenv().instantBusJump then
 		task.wait(getDataPing())
 		pivotModelTo(Character, landingPos, true)
 	end
-	
+
 	task.spawn(function()
 		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
 		LocalPlr.PlayerGui.JumpPrompt:Destroy()
@@ -273,24 +273,24 @@ local function canHitChar(char:Model)
 	if not char.inMatch.Value or char.Humanoid.Health <= 0 or char:FindFirstChild("Dead") then
 		return false
 	end
-	
+
 	-- Additional checks
 	if char.Ragdolled.Value or not char.Vulnerable.Value or char:FindFirstChild("Glider") or char.Head.Transparency == 1 then 
 		return false 
 	end
-	
+
 	-- Position sanity
 	local CHRMPOS = charHRM.Position
 	if math.abs(CHRMPOS.X) > 2000 or math.abs(CHRMPOS.Z) > 2000 or CHRMPOS.Y < - 160 or CHRMPOS.Y > 600 then
 		return false
 	end
-	
+
 	return true
 end
 
 local function getModelClosestChild(model:Model, position:Vector3)
 	local closestPart, closestMagnitude = nil, nil
-	
+
 	for _,v in model:GetChildren() do
 		if v:IsA("BasePart") then
 			local magnitude = (v.Position-position).Magnitude
@@ -300,24 +300,24 @@ local function getModelClosestChild(model:Model, position:Vector3)
 			end
 		end
 	end
-	
+
 	return closestPart
 end
 
 local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Model
 	local closest, closestMagnitude = nil, nil
-	
+
 	for _,plr in Players:GetPlayers() do
 		if plr == LocalPlr then continue end
 		if plr.Character == ignore or not canHitChar(plr.Character) then continue end
-		
+
 		local magnitude = (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude
 		if not closest or magnitude < closestMagnitude then
 			closest = plr.Character
 			closestMagnitude = magnitude
 		end
 	end
-	
+
 	return closest, closestMagnitude
 end
 
@@ -352,10 +352,10 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		continue 
 	end
-	
+
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
-	
+
 	local ignore = nil
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
@@ -363,7 +363,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			ignore = target
 			break
 		end
-		
+
 		if not Character:FindFirstChild(gloveName) then
 			if LocalPlr.Backpack:FindFirstChild(gloveName) then
 				Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
@@ -371,9 +371,9 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				error("Glove missing!")
 			end
 		end
-		
+
 		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
-		
+
 		moveToTick = os.clock()
 		task.wait()
 	end
