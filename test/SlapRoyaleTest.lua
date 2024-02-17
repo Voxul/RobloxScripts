@@ -343,7 +343,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end	
 		
-		HumanoidRootPart.CFrame = HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / distance*studsPerSecond)*(os.clock()-moveToTick))
+		HumanoidRootPart.CFrame = HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick))
 		HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 		HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
 		
