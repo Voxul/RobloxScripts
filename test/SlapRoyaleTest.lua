@@ -203,6 +203,7 @@ end
 if getgenv().instantBusJump then
 	task.wait(getDataPing() + 0.05)
 	while Character.Ragdolled.Value do
+		print("Ragdolled!")
 		task.wait()
 	end
 	
@@ -214,10 +215,10 @@ if getgenv().instantBusJump then
 		rayParam.FilterType = Enum.RaycastFilterType.Include
 		
 		local rayCast
-		for i = 1, 5 do
+		for i = 1, 10 do
 			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
 			if rayCast then break end
-			task.wait()
+			task.wait(0.01)
 		end
 		
 		local landingPos
