@@ -83,14 +83,16 @@ if getgenv().itemVacEnabled then
 		HumanoidRootPart.CFrame += Vector3.new(0, 40, 0)
 		local cachedCFrame = HumanoidRootPart.CFrame
 
-		local osS = os.clock()
-		while os.clock()-osS < 0.1 do
-			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-			HumanoidRootPart.CFrame = cachedCFrame
-			task.wait()
-		end
+		task.spawn(function()
+			local osS = os.clock()
+			while os.clock()-osS < 0.1 do
+				HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+				HumanoidRootPart.CFrame = cachedCFrame
+				task.wait()
+			end
 
-		HumanoidRootPart.Anchored = true
+			HumanoidRootPart.Anchored = true
+		end)
 
 		task.delay(0.8+getDataPing(), function()
 			HumanoidRootPart.Anchored = false
