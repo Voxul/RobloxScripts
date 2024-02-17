@@ -194,7 +194,7 @@ if getgenv().permaTruePower then
 end
 
 if getgenv().instantBusJump then
-	task.wait(0.2)
+	task.wait()
 	Events.BusJumping:FireServer()
 
 	if getgenv().teleportToGroundOnBusJump then
@@ -204,22 +204,22 @@ if getgenv().instantBusJump then
 		
 		local rayCast
 		for i = 1, 3 do
-			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-300,0), rayParam)
+			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
 			if rayCast then break end
-			task.wait()
+			task.wait(0.02)
 		end
 		
 		local landingPos
 		if rayCast then
-			landingPos = rayCast.Position + Vector3.new(0,2.5,0)
+			landingPos = CFrame.new(rayCast.Position + Vector3.new(0,2.5,0))
 		else
 			warn("Failed to get landing spot, falling back to set")
-			landingPos = HumanoidRootPart.Position - Vector3.new(0,100,0)
+			landingPos = HumanoidRootPart.CFrame - Vector3.new(0,100,0)
 		end
 
 		local jumpTimeoutStart = os.clock()
-		while landingPos and os.clock()-jumpTimeoutStart < 2 and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild(gloveName) do
-			HumanoidRootPart.Position = landingPos
+		while landingPos and os.clock()-jumpTimeoutStart < 3 and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild(gloveName) do
+			HumanoidRootPart.CFrame = landingPos
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			task.wait()
 		end
