@@ -203,11 +203,11 @@ end
 if getgenv().instantBusJump then
 	task.wait(getDataPing() + 0.05)
 	while Character.Ragdolled.Value do
-		print("Ragdolled!")
 		task.wait()
 	end
 	
 	Events.BusJumping:FireServer()
+	task.wait(getDataPing() + 0.05)
 
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
