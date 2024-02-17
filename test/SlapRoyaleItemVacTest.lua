@@ -1,6 +1,4 @@
 
-local getgenv = getfenv
-
 getgenv().disableBarriers = true
 getgenv().hazardCollision = true
 
