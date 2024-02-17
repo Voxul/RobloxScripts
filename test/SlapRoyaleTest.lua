@@ -361,6 +361,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
 			ignore = target
+			break
 		end
 		
 		if not Character:FindFirstChild(gloveName) then
