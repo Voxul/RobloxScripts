@@ -35,6 +35,8 @@ local Character = LocalPlr.Character or LocalPlr.CharacterAdded:Wait()
 local HumanoidRootPart:BasePart = Character:WaitForChild("HumanoidRootPart")
 local Humanoid:Humanoid = Character:WaitForChild("Humanoid")
 
+Character.PrimaryPart = HumanoidRootPart
+
 local dataPingItem = StatsService.Network:WaitForChild("ServerStatsItem"):WaitForChild("Data Ping")
 local function getDataPing():number
 	local a
@@ -84,14 +86,14 @@ if getgenv().itemVacEnabled then
 		local cachedCFrame = HumanoidRootPart.CFrame
 
 		task.delay(0.6, function()
+			Character:PivotTo(HumanoidRootPart.CFrame + Vector3.new(0, 38, 0))
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-			HumanoidRootPart.CFrame += Vector3.new(0, 38, 0)
 		end)
 
 		task.delay(0.8+getDataPing(), function()
 			if workspace:FindFirstChild("Lobby") then
+				Character:PivotTo(cachedCFrame)
 				HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-				HumanoidRootPart.CFrame = cachedCFrame
 			end
 		end)
 	end
@@ -168,6 +170,8 @@ end
 local gloveName = LocalPlr.Glove.Value
 
 if getgenv().permaTruePower then
+	task.wait()
+	
 	local firstTruePower = nil
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "True Power" then
@@ -204,7 +208,7 @@ if getgenv().instantBusJump then
 		for i = 1, 5 do
 			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
 			if rayCast then break end
-			task.wait(0.01)
+			task.wait()
 		end
 		
 		local landingPos
@@ -216,14 +220,14 @@ if getgenv().instantBusJump then
 		end
 
 		local jumpTimeoutStart = os.clock()
-		while landingPos and os.clock()-jumpTimeoutStart < 3 and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild(gloveName) do
-			HumanoidRootPart.CFrame = landingPos
+		while landingPos and (os.clock()-jumpTimeoutStart < 3 or Character.Ragdolled.Value) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild(gloveName) do
+			Character:PivotTo(landingPos)
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			task.wait()
 		end
-		HumanoidRootPart.CFrame = landingPos
-		task.wait(0.1 + getDataPing())
-		HumanoidRootPart.CFrame = landingPos
+		Character:PivotTo(landingPos)
+		task.wait(getDataPing())
+		Character:PivotTo(landingPos)
 	end
 	
 	task.spawn(function()
@@ -343,7 +347,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end	
 		
-		HumanoidRootPart.CFrame = HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick))
+		Character:PivotTo(HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)))
 		HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 		HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
 		
