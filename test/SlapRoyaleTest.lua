@@ -276,7 +276,7 @@ if getgenv().instantBusJump then
 			landingPos = CFrame.new(rayCast.Position + Vector3.new(0,2.5,0))
 		else
 			warn("Failed to get landing spot, falling back to setPos")
-			landingPos = HumanoidRootPart.CFrame - Vector3.new(0,200,0)
+			landingPos = HumanoidRootPart.CFrame - Vector3.new(0,300,0)
 		end
 
 		local jumpTimeoutStart = os.clock()
