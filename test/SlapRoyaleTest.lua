@@ -92,8 +92,8 @@ if getgenv().itemVacEnabled then
 			
 			c.AncestryChanged:Connect(function(_, p)
 				if p ~= Character then return end
-				print("Auto-activate "..v.Name)
-				task.defer(v.Activate, v)
+				print("Auto-activate "..c.Name)
+				task.defer(c.Activate, c)
 			end)
 		end
 	end)
@@ -132,12 +132,10 @@ if getgenv().itemVacEnabled then
 				Humanoid:EquipTool(v)
 			end
 
-			task.defer(function()
-				v.AncestryChanged:Connect(function(_, p)
-					if p ~= Character then return end
-					print("Auto-activate "..v.Name)
-					task.defer(v.Activate, v)
-				end)
+			v.AncestryChanged:Connect(function(_, p)
+				if p ~= Character then return end
+				print("Auto-activate "..v.Name)
+				task.defer(v.Activate, v)
 			end)
 		end
 	end
