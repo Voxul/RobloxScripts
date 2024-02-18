@@ -1,26 +1,30 @@
 if game.PlaceId ~= 9431156611 then warn("Not Slap Royale!") return end
 local getgenv = getgenv or getfenv
-getgenv().disableBarriers = true
-getgenv().hazardCollision = true
+if not getgenv().SRCheatConfigured then
+	getgenv().SRCheatConfigured = true
 
-getgenv().itemVacEnabled = true
-getgenv().itemVacHidePlayer = true
-getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
-getgenv().itemVacAllowBruteForce = true
+	getgenv().disableBarriers = true
+	getgenv().hazardCollision = true
 
-getgenv().bombBus = true
-getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
-getgenv().usePermaItems = true
+	getgenv().itemVacEnabled = true
+	getgenv().itemVacHidePlayer = true
+	getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
+	getgenv().itemVacAllowBruteForce = true
 
-getgenv().instantBusJump = true
-getgenv().teleportToGroundOnBusJump = true
+	getgenv().bombBus = true
+	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
+	getgenv().usePermaItems = true
 
-getgenv().safetyHeal = true
-getgenv().healthLow = 30
-getgenv().healthOk = 80
+	getgenv().instantBusJump = true
+	getgenv().teleportToGroundOnBusJump = true
 
-getgenv().killAll = true
-getgenv().killAllStudsPerSecond = 420
+	getgenv().safetyHeal = true
+	getgenv().healthLow = 30
+	getgenv().healthOk = 80
+
+	getgenv().killAll = true
+	getgenv().killAllStudsPerSecond = 420
+end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
