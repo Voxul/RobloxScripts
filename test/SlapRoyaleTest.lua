@@ -11,7 +11,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 	getgenv().itemVacAllowBruteForce = true
 	
-	getgenv().stealGloves = false
+	getgenv().stealGloves = false -- Item vac needs to be enabled.
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
@@ -107,6 +107,7 @@ if getgenv().itemVacEnabled then
 			Events.Item:FireServer(c.Handle)
 			c.Handle.Massless = true
 			
+			if c:FindFirstChild("Glove") then return end
 			c.AncestryChanged:Connect(function(_, p)
 				if p ~= Character then return end
 				print("Auto-activate "..c.Name)
