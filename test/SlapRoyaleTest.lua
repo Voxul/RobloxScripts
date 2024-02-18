@@ -91,17 +91,26 @@ if getgenv().itemVacEnabled then
 	-- Pick up anything new	
 	workspace.DescendantAdded:Connect(function(c)
 		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and c.Parent ~= Character then
-			if c:FindFirstChild("Glove") then 
+			if c:FindFirstChild("Glove") then
 				if not getgenv().stealGloves then return end
+				c.Glove.Massless = true
+				c.Glove.CFrame = HumanoidRootPart.CFrame
+				c.Handle.CFrame = HumanoidRootPart.CFrame
+				
 				gloveStealsInProgress += 1
 				
-				HumanoidRootPart.Anchored = true
+				for _,v in Character:GetChildren() do
+					if v:IsA("BasePart") then
+						v.Anchored = true
+					end
+				end
 				task.delay(0.3+getDataPing(), function()
 					gloveStealsInProgress -= 1
 					if gloveStealsInProgress ~= 0 then return end
-					task.wait(0.1)
-					if gloveStealsInProgress == 0 then
-						HumanoidRootPart.Anchored = false
+					for _,v in Character:GetChildren() do
+						if v:IsA("BasePart") then
+							v.Anchored = false
+						end
 					end
 				end)
 			end
