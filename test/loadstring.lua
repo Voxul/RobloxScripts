@@ -7,6 +7,8 @@ getgenv().itemVacHidePlayer = true
 getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 getgenv().itemVacAllowBruteForce = true
 
+getgenv().stealGloves = true -- Item vac needs to be enabled.
+
 getgenv().bombBus = true
 getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
 getgenv().usePermaItems = true
@@ -18,8 +20,8 @@ getgenv().safetyHeal = true
 getgenv().healthLow = 30
 getgenv().healthOk = 80
 
-getgenv().killAll = true
-getgenv().killAllStudsPerSecond = 420
+getgenv().killAll = false
+getgenv().killAllStudsPerSecond = 425
 
 if getgenv().SRCheatConfigured then return end
 getgenv().SRCheatConfigured = true
