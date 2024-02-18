@@ -99,9 +99,12 @@ if getgenv().itemVacEnabled then
 				
 				gloveStealsInProgress += 1
 				
+				local original = HumanoidRootPart.CFrame
 				for _,v in Character:GetChildren() do
 					if v:IsA("BasePart") then
 						v.Anchored = true
+						v.AssemblyLinearVelocity = Vector3.zero
+						v.AssemblyAngularVelocity = Vector3.zero
 					end
 				end
 				task.delay(0.3+getDataPing(), function()
@@ -110,8 +113,11 @@ if getgenv().itemVacEnabled then
 					for _,v in Character:GetChildren() do
 						if v:IsA("BasePart") then
 							v.Anchored = false
+							v.AssemblyLinearVelocity = Vector3.zero
+							v.AssemblyAngularVelocity = Vector3.zero
 						end
 					end
+					HumanoidRootPart.CFrame = original
 				end)
 			end
 			
