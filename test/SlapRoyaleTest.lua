@@ -86,7 +86,7 @@ end
 if getgenv().itemVacEnabled then
 	-- Pick up anything new
 	workspace.DescendantAdded:Connect(function(c)
-		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and not c:FindFirstChild("Glove") and c.Parent ~= Character then
+		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" --[[and not c:FindFirstChild("Glove")]] and c.Parent ~= Character then
 			Events.Item:FireServer(c.Handle)
 			c.Handle.Massless = true
 			
