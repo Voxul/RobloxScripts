@@ -10,6 +10,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().itemVacHidePlayer = true
 	getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 	getgenv().itemVacAllowBruteForce = true
+	
+	getgenv().stealGloves = false
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
@@ -83,10 +85,25 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
+local gloveStealsInProgress = 0
+
 if getgenv().itemVacEnabled then
-	-- Pick up anything new
+	-- Pick up anything new	
 	workspace.DescendantAdded:Connect(function(c)
-		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" --[[and not c:FindFirstChild("Glove")]] and c.Parent ~= Character then
+		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and c.Parent ~= Character then
+			if c:FindFirstChild("Glove") then 
+				if not getgenv().stealGloves then return end
+				gloveStealsInProgress += 1
+				
+				HumanoidRootPart.Anchored = true
+				task.delay(0.5+getDataPing(), function()
+					if gloveStealsInProgress == 1 then
+						HumanoidRootPart.Anchored = false
+					end
+					gloveStealsInProgress -= 1
+				end)
+			end
+			
 			Events.Item:FireServer(c.Handle)
 			c.Handle.Massless = true
 			
@@ -383,9 +400,14 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				error("Glove missing!")
 			end
 		end
-
-		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
-
+		
+		if gloveStealsInProgress == 0 then
+			pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
+		else
+			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+		end
+			
 		moveToTick = os.clock()
 		task.wait()
 	end
