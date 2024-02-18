@@ -107,10 +107,11 @@ if getgenv().itemVacEnabled then
 		local cachedCFrame = HumanoidRootPart.CFrame
 		pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
 
-		task.wait(0.5+getDataPing())
-		if workspace:FindFirstChild("Lobby") then
-			pivotModelTo(Character, cachedCFrame, true)
-		end
+		task.delay(0.5+getDataPing(), function()
+			if workspace:FindFirstChild("Lobby") then
+				pivotModelTo(Character, cachedCFrame, true)
+			end
+		end)
 	end
 
 	local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
