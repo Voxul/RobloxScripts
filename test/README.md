@@ -16,6 +16,8 @@
 - Instant Bus Jump
   - Instant Land <sub>(teleports you to the ground)</sub>
 - Auto-Heal <sub>(heals you automatically on low HP)</sub>
+  - Configurable trigger health value
+  - Configurable safe health value
 - Kill All/Auto Win (OP) <sub>(recommend to use item vac with this)</sub>
   - Configurable move speed
 
