@@ -96,7 +96,7 @@ if getgenv().itemVacEnabled then
 				gloveStealsInProgress += 1
 				
 				HumanoidRootPart.Anchored = true
-				task.delay(0.5+getDataPing(), function()
+				task.delay(0.4+getDataPing(), function()
 					if gloveStealsInProgress == 1 then
 						HumanoidRootPart.Anchored = false
 					end
