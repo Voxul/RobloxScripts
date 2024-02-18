@@ -89,8 +89,8 @@ local gloveStealsInProgress = 0
 
 if getgenv().itemVacEnabled then
 	-- Pick up anything new	
-	workspace.DescendantAdded:Connect(function(c)
-		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and c.Parent ~= Character then
+	game.DescendantAdded:Connect(function(c)
+		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and c.Parent ~= Character and c.Parent ~= LocalPlr.Backpack then
 			if c:FindFirstChild("Glove") then
 				if not getgenv().stealGloves then return end
 				c.Glove.Massless = true
