@@ -92,8 +92,8 @@ if getgenv().itemVacEnabled then
 			
 			c.AncestryChanged:Connect(function(_, p)
 				if p ~= Character then return end
-				print("Auto-activate "..c.Name)
-				c:Activate()
+				print("Auto-activate "..v.Name)
+				task.defer(v.Activate, v)
 			end)
 		end
 	end)
@@ -136,7 +136,7 @@ if getgenv().itemVacEnabled then
 				v.AncestryChanged:Connect(function(_, p)
 					if p ~= Character then return end
 					print("Auto-activate "..v.Name)
-					v:Activate()
+					task.defer(v.Activate, v)
 				end)
 			end)
 		end
