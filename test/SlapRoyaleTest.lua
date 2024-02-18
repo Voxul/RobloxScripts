@@ -85,12 +85,17 @@ end
 
 if getgenv().itemVacEnabled then
 	-- Pick up anything new
-	workspace.Items.ChildAdded:Connect(function(c)
-		if c:IsA("Tool") and c:FindFirstChild("Handle") then
+	workspace.DescendantAdded:Connect(function(c)
+		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Parent ~= Character then
 			Events.Item:FireServer(c.Handle)
+			
+			c.Equipped:Connect(function()
+				print("Auto-activate "..c.Name)
+				c:Activate()
+			end)
 		end
 	end)
-
+	
 	if getgenv().itemVacWaitForBus then
 		if workspace:FindFirstChild("Lobby") then
 			print("Waiting for bus")
@@ -123,7 +128,8 @@ if getgenv().itemVacEnabled then
 
 			if doBruteForcePickup then 
 				v.Handle.Massless = true
-				v.Handle.Anchored = false 
+				v.Handle.Anchored = false
+				v.Handle.CFrame = HumanoidRootPart.CFrame
 				Humanoid:EquipTool(v)
 			end
 
@@ -131,11 +137,11 @@ if getgenv().itemVacEnabled then
 				v.Equipped:Connect(function()
 					print("Auto-activate "..v.Name)
 					v:Activate()
-					Humanoid:UnequipTools()
 				end)
 			end)
 		end
 	end
+	
 	Humanoid:UnequipTools()
 	task.wait(getDataPing())
 	Humanoid:UnequipTools()
