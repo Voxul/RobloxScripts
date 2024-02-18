@@ -88,6 +88,7 @@ if getgenv().itemVacEnabled then
 	workspace.DescendantAdded:Connect(function(c)
 		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and not c:FindFirstChild("Glove") and c.Parent ~= Character then
 			Events.Item:FireServer(c.Handle)
+			c.Handle.Massless = true
 			
 			c.Equipped:Connect(function()
 				print("Auto-activate "..c.Name)
@@ -125,9 +126,9 @@ if getgenv().itemVacEnabled then
 	for _,v in workspace.Items:GetChildren() do
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			Events.Item:FireServer(v.Handle)
-
+			v.Handle.Massless = true
+			
 			if doBruteForcePickup then 
-				v.Handle.Massless = true
 				v.Handle.Anchored = false
 				v.Handle.CFrame = HumanoidRootPart.CFrame
 				Humanoid:EquipTool(v)
@@ -232,7 +233,7 @@ if getgenv().instantBusJump then
 
 		local rayCast
 		for i = 1, 10 do
-			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
+			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-400,0), rayParam)
 			if rayCast then break end
 			task.wait(0.01)
 		end
@@ -241,8 +242,8 @@ if getgenv().instantBusJump then
 		if rayCast then
 			landingPos = CFrame.new(rayCast.Position + Vector3.new(0,2.5,0))
 		else
-			warn("Failed to get landing spot, falling back to set")
-			landingPos = HumanoidRootPart.CFrame - Vector3.new(0,100,0)
+			warn("Failed to get landing spot, falling back to setPos")
+			landingPos = HumanoidRootPart.CFrame - Vector3.new(0,200,0)
 		end
 
 		local jumpTimeoutStart = os.clock()
