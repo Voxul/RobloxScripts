@@ -90,7 +90,8 @@ if getgenv().itemVacEnabled then
 			Events.Item:FireServer(c.Handle)
 			c.Handle.Massless = true
 			
-			c.Equipped:Connect(function()
+			c.AncestryChanged:Connect(function(_, p)
+				if p ~= Character then return end
 				print("Auto-activate "..c.Name)
 				c:Activate()
 			end)
@@ -105,10 +106,10 @@ if getgenv().itemVacEnabled then
 	elseif getgenv().itemVacHidePlayer then
 		local cachedCFrame = HumanoidRootPart.CFrame
 
-		task.delay(0.1 + getDataPing(), function()
+		task.delay(getDataPing(), function()
 			pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
 
-			task.wait(0.5)
+			task.wait(0.5+getDataPing())
 			if workspace:FindFirstChild("Lobby") then
 				pivotModelTo(Character, cachedCFrame, true)
 			end
@@ -135,7 +136,8 @@ if getgenv().itemVacEnabled then
 			end
 
 			task.defer(function()
-				v.Equipped:Connect(function()
+				v.AncestryChanged:Connect(function(_, p)
+					if p ~= Character then return end
 					print("Auto-activate "..v.Name)
 					v:Activate()
 				end)
