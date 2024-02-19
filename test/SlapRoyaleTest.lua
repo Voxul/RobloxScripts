@@ -108,6 +108,7 @@ local function stealTool(tool:Tool)
 				while tool.Parent ~= LocalPlr.Backpack do
 					pivotModelTo(Character, original, true)
 					toolHandle.CFrame = original
+					task.wait()
 				end
 			end)
 		end
