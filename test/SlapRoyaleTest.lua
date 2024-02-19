@@ -129,14 +129,18 @@ if getgenv().disableGloves then
 end
 
 if getgenv().breakGame then
+	HumanoidRootPart.Anchored = true
 	warn("!! BREAKING THE GAME !!")
-	for _,v in game:GetDescendants() do
+	for i,v in workspace:GetDescendants() do
 		if v:IsA("BasePart") then
 			Events.Item:FireServer(v)
-			task.wait()
+			if i%3 == 0 then
+				task.wait()
+			end
 		end
 	end
 	warn("Finished breaking game")
+	HumanoidRootPart.Anchored = false
 end
 
 if getgenv().itemVacEnabled then
