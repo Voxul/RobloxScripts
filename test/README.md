@@ -9,7 +9,7 @@
   - Use only in bus
   - Brute force pickup (prevents other exploiters from taking it before you) <sub>(has a slight kick chance tho)</sub>
   - Steals any new items (witch brews, etc)
-- Glove steal (OP) <sub>(item vac has to be enabled, can teleport the player, might kick you)</sub>
+- Item/Glove Steal (OP) <sub>(can teleport the player, might kick you)</sub>
 - Bus bomb
 - Auto permanent true power
 - Auto use permanent items
