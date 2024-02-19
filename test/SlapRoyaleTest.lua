@@ -139,7 +139,7 @@ if getgenv().breakGame then
 			Events.Item:FireServer(v)
 			v.CanCollide = false
 			v.CanTouch = false
-			if i%12 == 0 then
+			if i%15 == 0 then
 				task.wait()
 			end
 		end
