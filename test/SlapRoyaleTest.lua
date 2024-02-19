@@ -12,6 +12,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().itemVacAllowBruteForce = true
 	
 	getgenv().stealItems = false -- Steals items from other players (including their gloves)
+	
+	getgenv().breakGame = false -- breaks the game
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
@@ -96,6 +98,7 @@ local function stealTool(tool:Tool)
 			if tool:FindFirstChild("Glove") then
 				tool.Glove.Massless = true
 				tool.Glove.CFrame = HumanoidRootPart.CFrame
+				tool.Glove.Anchored = false
 			else
 				tool.AncestryChanged:Connect(function(_, p)
 					if p ~= Character then return end
@@ -106,19 +109,9 @@ local function stealTool(tool:Tool)
 
 			task.spawn(function()
 				itemStealsInProgress += 1
-				local original = HumanoidRootPart.CFrame
-				local toolHandle = tool.Handle
-				toolHandle.CFrame = original
-				local weld = Instance.new("WeldConstraint", toolHandle)
-				weld.Part0 = toolHandle
-				weld.Part1 = HumanoidRootPart
 				
-				local timeOutTick = os.clock()
-				while tool and tool.Parent ~= LocalPlr.Backpack and os.clock()-timeOutTick < 1 do
-					pivotModelTo(Character, original, true)
-					toolHandle.CFrame = original
-					task.wait()
-				end
+				tool.AncestryChanged:Wait()
+				print("Item steal finish")
 				
 				itemStealsInProgress -= 1
 				if itemStealsInProgress == 0 then
@@ -127,9 +120,18 @@ local function stealTool(tool:Tool)
 			end)
 		end
 		
-		Events.Item:FireServer(tool.Handle)
 		tool.Handle.CFrame = HumanoidRootPart.CFrame
 		tool.Handle.Massless = true
+		Events.Item:FireServer(tool.Handle)
+	end
+end
+
+if getgenv().breakGame then
+	warn("You are about to break the game!")
+	for _,v in game:GetDescendants() do
+		if v:IsA("Tool") and v:FindFirstChild("Handle") and v.Parent ~= Character and v.Parent ~= LocalPlr.Backpack then
+			Events.Item:FireServer(v.Handle)
+		end
 	end
 end
 
@@ -215,12 +217,12 @@ if getgenv().safetyHeal then
 	end)
 end
 
-if getgenv().bombBus then
-	if workspace:FindFirstChild("Lobby") then
-		print("Waiting for Bus")
-		workspace.Lobby.AncestryChanged:Wait()
-	end
+if workspace:FindFirstChild("Lobby") then
+	print("Waiting for Bus")
+	workspace.Lobby.AncestryChanged:Wait()
+end
 
+if getgenv().bombBus then
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
 			Humanoid:EquipTool(v)
@@ -229,10 +231,7 @@ if getgenv().bombBus then
 	end
 end
 
-if workspace:FindFirstChild("Lobby") then
-	print("Waiting for Bus")
-	workspace.Lobby.AncestryChanged:Wait()
-end
+
 
 local gloveName = LocalPlr.Glove.Value
 
