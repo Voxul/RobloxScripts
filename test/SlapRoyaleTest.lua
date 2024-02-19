@@ -134,7 +134,7 @@ if getgenv().breakGame then
 	HumanoidRootPart.Anchored = true
 	warn("!! BREAKING THE GAME !!")
 	for i,v in workspace:GetDescendants() do
-		if v:IsA("BasePart") then
+		if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) then
 			Events.Item:FireServer(v)
 			if i%3 == 0 then
 				task.wait()
