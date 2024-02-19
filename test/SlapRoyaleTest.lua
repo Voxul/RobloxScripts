@@ -85,6 +85,7 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
+local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
 	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
 		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
@@ -104,8 +105,13 @@ local function stealTool(tool:Tool)
 			end
 
 			task.spawn(function()
+				itemStealsInProgress += 1
 				local original = HumanoidRootPart.CFrame
 				local toolHandle = tool.Handle
+				toolHandle.CFrame = original
+				local weld = Instance.new("WeldConstraint", toolHandle)
+				weld.Part0 = toolHandle
+				weld.Part1 = HumanoidRootPart
 				
 				local timeOutTick = os.clock()
 				while tool and tool.Parent ~= LocalPlr.Backpack and os.clock()-timeOutTick < 1 do
@@ -113,7 +119,11 @@ local function stealTool(tool:Tool)
 					toolHandle.CFrame = original
 					task.wait()
 				end
-				HumanoidRootPart.Anchored = false
+				
+				itemStealsInProgress -= 1
+				if itemStealsInProgress == 0 then
+					HumanoidRootPart.Anchored = false
+				end
 			end)
 		end
 		
@@ -417,7 +427,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
-		if gloveStealsInProgress == 0 then
+		if itemStealsInProgress == 0 then
 			pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 		else
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
