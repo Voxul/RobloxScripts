@@ -89,7 +89,9 @@ local function stealTool(tool:Tool)
 	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
 		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
 			print("Stealing item from player")
-
+			
+			HumanoidRootPart.Anchored = true
+			
 			if tool:FindFirstChild("Glove") then
 				tool.Glove.Massless = true
 				tool.Glove.CFrame = HumanoidRootPart.CFrame
@@ -110,6 +112,7 @@ local function stealTool(tool:Tool)
 					toolHandle.CFrame = original
 					task.wait()
 				end
+				HumanoidRootPart.Anchored = false
 			end)
 		end
 		
