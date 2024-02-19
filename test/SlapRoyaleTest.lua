@@ -131,18 +131,19 @@ if getgenv().disableGloves then
 end
 
 if getgenv().breakGame then
-	HumanoidRootPart.Anchored = true
-	warn("!! BREAKING THE GAME !!")
-	for i,v in workspace:GetDescendants() do
-		if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) then
-			Events.Item:FireServer(v)
-			if i%5 == 0 then
-				task.wait()
+	task.spawn(function()
+		warn("!! BREAKING THE GAME !!")
+		for i,v in workspace:GetDescendants() do
+			if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and (v:FindFirstAncestorWhichIsA("Model") and not v:FindFirstAncestorWhichIsA("Model"):FindFirstChild("Humanoid")) then
+				Events.Item:FireServer(v)
+				v.CanCollide = false
+				if i%5 == 0 then
+					task.wait()
+				end
 			end
 		end
-	end
-	warn("Finished breaking game")
-	HumanoidRootPart.Anchored = false
+		warn("Finished breaking game")
+	end)
 end
 
 if getgenv().itemVacEnabled then
