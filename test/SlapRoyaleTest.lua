@@ -11,9 +11,9 @@ if not getgenv().SRCheatConfigured then
 	getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 	getgenv().itemVacAllowBruteForce = true
 	
-	getgenv().stealItems = false -- Steals items from other players (including their gloves)
-	
-	getgenv().breakGame = false -- breaks the game
+	getgenv().stealItems = false -- Steals items from other players (excluding their gloves)
+	getgenv().disableGloves = false -- Disables all gloves for other players, you will get all of them but only the one you equipped works, use in lobby.
+	getgenv().breakGame = false -- Breaks the entire game
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
@@ -89,23 +89,16 @@ end
 
 local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
-	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
+	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and not tool:FindFirstChild("Glove") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
 		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
 			print("Stealing item from player")
 			
 			HumanoidRootPart.Anchored = true
-			
-			if tool:FindFirstChild("Glove") then
-				tool.Glove.Massless = true
-				tool.Glove.CFrame = HumanoidRootPart.CFrame
-				tool.Glove.Anchored = false
-			else
-				tool.AncestryChanged:Connect(function(_, p)
-					if p ~= Character then return end
-					print("Auto-activate "..tool.Name)
-					task.defer(tool.Activate, tool)
-				end)
-			end
+			tool.AncestryChanged:Connect(function(_, p)
+				if p ~= Character then return end
+				print("Auto-activate "..tool.Name)
+				task.defer(tool.Activate, tool)
+			end)
 
 			task.spawn(function()
 				itemStealsInProgress += 1
@@ -126,13 +119,24 @@ local function stealTool(tool:Tool)
 	end
 end
 
-if getgenv().breakGame then
-	warn("You are about to break the game!")
-	for _,v in game:GetDescendants() do
-		if v:IsA("Tool") and v:FindFirstChild("Handle") and v.Parent ~= Character and v.Parent ~= LocalPlr.Backpack then
+if getgenv().disableGloves then
+	for _,v in ReplicatedStorage.Gloves do
+		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			Events.Item:FireServer(v.Handle)
 		end
 	end
+	warn("Gloves disabled!")
+end
+
+if getgenv().breakGame then
+	warn("!! BREAKING THE GAME !!")
+	for _,v in game:GetDescendants() do
+		if v:IsA("BasePart") then
+			Events.Item:FindFirstChild(v)
+			task.wait()
+		end
+	end
+	warn("Finished breaking game")
 end
 
 if getgenv().itemVacEnabled then
