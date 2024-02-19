@@ -3,8 +3,8 @@ getgenv().disableBarriers = true
 getgenv().hazardCollision = true
 
 getgenv().itemVacEnabled = true
-getgenv().itemVacHidePlayer = true
-getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
+getgenv().itemVacHidePlayer = false
+getgenv().itemVacWaitForBus = true -- This will override itemVacHidePlayer
 getgenv().itemVacAllowBruteForce = true
 
 getgenv().stealItems = false -- Steals items from other players (excluding their gloves)
