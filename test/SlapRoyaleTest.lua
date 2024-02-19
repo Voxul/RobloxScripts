@@ -87,7 +87,7 @@ end
 
 local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
-	if tool:IsA("Tool") and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
+	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
 		Events.Item:FireServer(tool.Handle)
 		tool.Handle.Massless = true
 
@@ -143,7 +143,7 @@ if getgenv().itemVacEnabled then
 		local cachedCFrame = HumanoidRootPart.CFrame
 		pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
 
-		task.delay(0.5+getDataPing(), function()
+		task.delay(0.4+getDataPing()*2, function()
 			if workspace:FindFirstChild("Lobby") then
 				pivotModelTo(Character, cachedCFrame, true)
 			end
