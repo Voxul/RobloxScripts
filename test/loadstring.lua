@@ -6,10 +6,10 @@ getgenv().itemVacEnabled = true
 getgenv().itemVacHidePlayer = true
 getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 getgenv().itemVacAllowBruteForce = true
-
-getgenv().stealItems = false -- Steals items from other players (including their gloves)
-
-getgenv().breakGame = false -- breaks the game
+	
+getgenv().stealItems = false -- Steals items from other players (excluding their gloves)
+getgenv().disableGloves = false -- Disables all gloves for other players, you will get all of them but only the one you equipped works, use in lobby.
+getgenv().breakGame = false -- Breaks the entire game
 
 getgenv().bombBus = true
 getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
@@ -22,8 +22,8 @@ getgenv().safetyHeal = true
 getgenv().healthLow = 30
 getgenv().healthOk = 80
 
-getgenv().killAll = false
-getgenv().killAllStudsPerSecond = 425
+getgenv().killAll = true
+getgenv().killAllStudsPerSecond = 420
 
 if getgenv().SRCheatConfigured then return end
 getgenv().SRCheatConfigured = true
