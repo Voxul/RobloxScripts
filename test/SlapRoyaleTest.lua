@@ -122,7 +122,7 @@ local function stealTool(tool:Tool)
 end
 
 if getgenv().disableGloves then
-	for _,v in ReplicatedStorage.Gloves do
+	for _,v in ReplicatedStorage.Gloves:GetChildren() do
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			Events.Item:FireServer(v.Handle)
 		end
