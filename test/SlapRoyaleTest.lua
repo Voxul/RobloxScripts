@@ -93,6 +93,7 @@ local function stealTool(tool:Tool)
 
 			if tool:FindFirstChild("Glove") then
 				tool.Glove.Massless = true
+				tool.Glove.CFrame = HumanoidRootPart.CFrame
 			else
 				tool.AncestryChanged:Connect(function(_, p)
 					if p ~= Character then return end
@@ -106,12 +107,12 @@ local function stealTool(tool:Tool)
 			local original = HumanoidRootPart.CFrame
 			for _,v in Character:GetChildren() do
 				if v:IsA("BasePart") then
-					v.Anchored = true
 					v.AssemblyLinearVelocity = Vector3.zero
 					v.AssemblyAngularVelocity = Vector3.zero
+					v.Anchored = true
 				end
 			end
-			task.delay(0.3+getDataPing(), function()
+			task.delay(0.2+getDataPing(), function()
 				itemStealsInProgress -= 1
 				if itemStealsInProgress ~= 0 then return end
 				for _,v in Character:GetChildren() do
@@ -121,11 +122,12 @@ local function stealTool(tool:Tool)
 						v.AssemblyAngularVelocity = Vector3.zero
 					end
 				end
-				HumanoidRootPart.CFrame = original
+				pivotModelTo(Character, original, true)
 			end)
 		end
 		
 		Events.Item:FireServer(tool.Handle)
+		tool.Handle.CFrame = HumanoidRootPart.CFrame
 		tool.Handle.Massless = true
 	end
 end
