@@ -139,10 +139,8 @@ if getgenv().breakGame then
 			if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and (v:FindFirstAncestorWhichIsA("Model") and not v:FindFirstAncestorWhichIsA("Model"):FindFirstChild("Humanoid")) then
 				Events.Item:FireServer(v)
 				v.CanCollide = false
-				if i%5 == 0 then
-					HumanoidRootPart.Anchored = false
+				if i%10 == 0 then
 					task.wait()
-					HumanoidRootPart.Anchored = true
 				end
 			end
 		end
