@@ -11,7 +11,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 	getgenv().itemVacAllowBruteForce = true
 	
-	getgenv().stealGloves = false -- Item vac needs to be enabled.
+	getgenv().stealItems = false -- Steals items from other players (including their gloves)
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
@@ -85,53 +85,54 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-local gloveStealsInProgress = 0
+local itemStealsInProgress = 0
+local function stealTool(tool:Tool)
+	if tool:IsA("Tool") and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
+		Events.Item:FireServer(tool.Handle)
+		tool.Handle.Massless = true
 
-if getgenv().itemVacEnabled then
-	-- Pick up anything new	
-	game.DescendantAdded:Connect(function(c)
-		if c:IsA("Tool") and c:FindFirstChild("Handle") and c.Name ~= "Glider" and c.Parent and c.Parent ~= Character and c.Parent ~= LocalPlr.Backpack then
-			if c:FindFirstChild("Glove") then
-				if not getgenv().stealGloves then return end
-				c.Glove.Massless = true
-				c.Glove.CFrame = HumanoidRootPart.CFrame
-				c.Handle.CFrame = HumanoidRootPart.CFrame
-				
-				gloveStealsInProgress += 1
-				
-				local original = HumanoidRootPart.CFrame
+		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
+			print("Stealing item from player")
+			
+			if tool:FindFirstChild("Glove") then
+				tool.Glove.Massless = true
+			else
+				tool.AncestryChanged:Connect(function(_, p)
+					if p ~= Character then return end
+					print("Auto-activate "..tool.Name)
+					task.defer(tool.Activate, tool)
+				end)
+			end
+
+			itemStealsInProgress += 1
+
+			local original = HumanoidRootPart.CFrame
+			for _,v in Character:GetChildren() do
+				if v:IsA("BasePart") then
+					v.Anchored = true
+					v.AssemblyLinearVelocity = Vector3.zero
+					v.AssemblyAngularVelocity = Vector3.zero
+				end
+			end
+			task.delay(0.3+getDataPing(), function()
+				itemStealsInProgress -= 1
+				if itemStealsInProgress ~= 0 then return end
 				for _,v in Character:GetChildren() do
 					if v:IsA("BasePart") then
-						v.Anchored = true
+						v.Anchored = false
 						v.AssemblyLinearVelocity = Vector3.zero
 						v.AssemblyAngularVelocity = Vector3.zero
 					end
 				end
-				task.delay(0.3+getDataPing(), function()
-					gloveStealsInProgress -= 1
-					if gloveStealsInProgress ~= 0 then return end
-					for _,v in Character:GetChildren() do
-						if v:IsA("BasePart") then
-							v.Anchored = false
-							v.AssemblyLinearVelocity = Vector3.zero
-							v.AssemblyAngularVelocity = Vector3.zero
-						end
-					end
-					HumanoidRootPart.CFrame = original
-				end)
-			end
-			
-			Events.Item:FireServer(c.Handle)
-			c.Handle.Massless = true
-			
-			if c:FindFirstChild("Glove") then return end
-			c.AncestryChanged:Connect(function(_, p)
-				if p ~= Character then return end
-				print("Auto-activate "..c.Name)
-				task.defer(c.Activate, c)
+				HumanoidRootPart.CFrame = original
 			end)
 		end
-	end)
+	end
+end
+
+if getgenv().itemVacEnabled then
+	-- Pick up anything new
+	workspace.DescendantAdded:Connect(stealTool)
 	
 	if getgenv().itemVacWaitForBus then
 		if workspace:FindFirstChild("Lobby") then
@@ -180,6 +181,10 @@ if getgenv().itemVacEnabled then
 	task.wait(getDataPing())
 	Humanoid:UnequipTools()
 	HumanoidRootPart.Anchored = false
+end
+
+if getgenv().stealItems then
+	Players.DescendantAdded:Connect(stealTool)
 end
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
