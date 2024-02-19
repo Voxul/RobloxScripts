@@ -146,6 +146,7 @@ if workspace:FindFirstChild("Lobby") then
 	workspace.Lobby.AncestryChanged:Wait()
 end
 
+local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
 	--local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
 	--print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
@@ -154,6 +155,8 @@ if getgenv().itemVacEnabled then
 	-- Pick up dropped items
 	workspace.Items.ChildAdded:Connect(function(c)
 		if not c:IsA("Tool") or not c:FindFirstChild("Handle") then return end
+		
+		itemPickupInProgress = true
 		
 		c.Handle.Massless = true
 		c.Handle.Anchored = false
@@ -171,6 +174,8 @@ if getgenv().itemVacEnabled then
 			print("Auto-activate "..c.Name)
 			task.defer(c.Activate, c)
 		end)
+		
+		itemPickupInProgress = false
 	end)
 
 	HumanoidRootPart.Anchored = true
@@ -196,6 +201,8 @@ if getgenv().itemVacEnabled then
 	task.wait(getDataPing())
 	Humanoid:UnequipTools()
 	HumanoidRootPart.Anchored = false
+	
+	task.wait(getDataPing())
 end
 
 --[[if getgenv().stealItems then
@@ -412,7 +419,6 @@ task.spawn(function()
 end)
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
-
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
@@ -439,12 +445,12 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
-		--if itemStealsInProgress == 0 then
+		if not itemPickupInProgress then
 			pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
-		--[[else
+		else
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
-		end]]
+		end
 			
 		moveToTick = os.clock()
 		task.wait()
