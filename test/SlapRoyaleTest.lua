@@ -136,7 +136,7 @@ if getgenv().breakGame then
 	for i,v in workspace:GetDescendants() do
 		if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) then
 			Events.Item:FireServer(v)
-			if i%3 == 0 then
+			if i%5 == 0 then
 				task.wait()
 			end
 		end
