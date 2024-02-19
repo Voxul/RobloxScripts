@@ -144,7 +144,7 @@ if getgenv().breakGame then
 			end
 		end
 	end
-	task.wait(0.5)
+	task.wait(0.5 + getDataPing())
 	
 	HumanoidRootPart.Anchored = false
 	warn("Finished breaking game")
