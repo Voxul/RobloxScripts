@@ -155,12 +155,22 @@ if getgenv().itemVacEnabled then
 	workspace.Items.ChildAdded:Connect(function(c)
 		if not c:IsA("Tool") or not c:FindFirstChild("Handle") then return end
 		
+		c.Handle.Massless = true
+		c.Handle.Anchored = false
+		c.Handle.CFrame = HumanoidRootPart.CFrame
+		
 		HumanoidRootPart.Anchored = true
 		Humanoid:EquipTool(c)
 		Humanoid:UnequipTools()
 		task.wait(getDataPing())
 		Humanoid:UnequipTools()
 		HumanoidRootPart.Anchored = false
+		
+		c.AncestryChanged:Connect(function(_, p)
+			if p ~= Character then return end
+			print("Auto-activate "..c.Name)
+			task.defer(c.Activate, c)
+		end)
 	end)
 
 	HumanoidRootPart.Anchored = true
