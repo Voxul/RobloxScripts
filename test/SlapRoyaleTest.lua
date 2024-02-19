@@ -132,7 +132,7 @@ if getgenv().breakGame then
 	warn("!! BREAKING THE GAME !!")
 	for _,v in game:GetDescendants() do
 		if v:IsA("BasePart") then
-			Events.Item:FindFirstChild(v)
+			Events.Item:FireServer(v)
 			task.wait()
 		end
 	end
