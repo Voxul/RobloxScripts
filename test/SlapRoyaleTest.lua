@@ -85,7 +85,6 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
 	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
 		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
@@ -102,27 +101,14 @@ local function stealTool(tool:Tool)
 				end)
 			end
 
-			itemStealsInProgress += 1
-
-			local original = HumanoidRootPart.CFrame
-			for _,v in Character:GetChildren() do
-				if v:IsA("BasePart") then
-					v.AssemblyLinearVelocity = Vector3.zero
-					v.AssemblyAngularVelocity = Vector3.zero
-					v.Anchored = true
+			task.spawn(function()
+				local original = HumanoidRootPart.CFrame
+				local toolHandle = tool.Handle
+				
+				while tool.Parent ~= LocalPlr.Backpack do
+					pivotModelTo(Character, original, true)
+					toolHandle.CFrame = original
 				end
-			end
-			task.delay(0.2+getDataPing(), function()
-				itemStealsInProgress -= 1
-				if itemStealsInProgress ~= 0 then return end
-				for _,v in Character:GetChildren() do
-					if v:IsA("BasePart") then
-						v.Anchored = false
-						v.AssemblyLinearVelocity = Vector3.zero
-						v.AssemblyAngularVelocity = Vector3.zero
-					end
-				end
-				pivotModelTo(Character, original, true)
 			end)
 		end
 		
