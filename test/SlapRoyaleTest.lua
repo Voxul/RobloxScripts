@@ -88,12 +88,9 @@ end
 local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
 	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
-		Events.Item:FireServer(tool.Handle)
-		tool.Handle.Massless = true
-
 		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
 			print("Stealing item from player")
-			
+
 			if tool:FindFirstChild("Glove") then
 				tool.Glove.Massless = true
 			else
@@ -127,6 +124,9 @@ local function stealTool(tool:Tool)
 				HumanoidRootPart.CFrame = original
 			end)
 		end
+		
+		Events.Item:FireServer(tool.Handle)
+		tool.Handle.Massless = true
 	end
 end
 
