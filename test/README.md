@@ -4,11 +4,8 @@
 - Anti-Acid/Anti-Lava/Anti-Barrier
   - Touch disabling
   - Set part solid <sub>(so you can walk on it)</sub>
-- ~~Item Vacuum~~ (PATCHED) <sub>looking for workaround</sub>
-  - Hide player while item vacuuming in lobby
-  - Use only in bus
-  - Brute force pickup (prevents other exploiters from taking it before you) <sub>(has a slight kick chance tho)</sub>
-  - ~~Steals any new items (witch brews, etc)~~ (PATCHED)
+- Item Vacuum <sub>workaround found!</sub>
+  - Steals any new items (witch brews, etc) (Dropped items only)
 - ~~Item Steal (OP) <sub>(can teleport the player, might kick you)</sub>~~ (PATCHED)
 - ~~Glove Steal (OP) (no one except you gets gloves)~~ (PATCHED)
 - ~~Game Breaker (OP) (breaks the entire map)~~ (PATCHED)
