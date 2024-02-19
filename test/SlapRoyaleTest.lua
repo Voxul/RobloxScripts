@@ -133,15 +133,24 @@ end
 if getgenv().breakGame then
 	task.spawn(function()
 		warn("!! BREAKING THE GAME !!")
+		HumanoidRootPart.Anchored = true
+		
+		local origin = HumanoidRootPart.CFrame
 		for i,v in workspace:GetDescendants() do
 			if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and (v:FindFirstAncestorWhichIsA("Model") and not v:FindFirstAncestorWhichIsA("Model"):FindFirstChild("Humanoid")) then
 				Events.Item:FireServer(v)
 				v.CanCollide = false
+				pivotModelTo(Character, origin, true)
 				if i%5 == 0 then
+					HumanoidRootPart.Anchored = false
 					task.wait()
+					HumanoidRootPart.Anchored = true
 				end
+				pivotModelTo(Character, origin, true)
 			end
 		end
+		
+		HumanoidRootPart.Anchored = false
 		warn("Finished breaking game")
 	end)
 end
