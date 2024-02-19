@@ -7,19 +7,10 @@ if not getgenv().SRCheatConfigured then
 	getgenv().hazardCollision = true
 
 	getgenv().itemVacEnabled = true
-	getgenv().itemVacHidePlayer = true
-	getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
-	getgenv().itemVacAllowBruteForce = true
-	
-	getgenv().stealItems = false -- Steals items from other players (excluding their gloves)
-	getgenv().disableGloves = false -- Disables all gloves for other players, you will get all of them but only the one you equipped works, use in lobby.
-	getgenv().breakGame = false -- Breaks the entire game
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
 	getgenv().usePermaItems = true
-	
-	getgenv().instantWin = false -- Kills everyone instantly
 
 	getgenv().instantBusJump = true
 	getgenv().teleportToGroundOnBusJump = true
@@ -89,7 +80,7 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-local itemStealsInProgress = 0
+--[[local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
 	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and not tool:FindFirstChild("Glove") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
 		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
@@ -148,47 +139,30 @@ if getgenv().breakGame then
 	
 	HumanoidRootPart.Anchored = false
 	warn("Finished breaking game")
+end]]
+
+if workspace:FindFirstChild("Lobby") then
+	print("Waiting for Bus")
+	workspace.Lobby.AncestryChanged:Wait()
 end
 
 if getgenv().itemVacEnabled then
-	-- Pick up anything new
-	workspace.DescendantAdded:Connect(stealTool)
-	
-	if getgenv().itemVacWaitForBus then
-		if workspace:FindFirstChild("Lobby") then
-			print("Waiting for bus")
-			workspace.Lobby.AncestryChanged:Wait()
-		end
-	elseif getgenv().itemVacHidePlayer then
-		local cachedCFrame = HumanoidRootPart.CFrame
-		pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 38, 0), true)
+	--local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
+	--print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
+	print("Item Vac started, picking up "..#workspace.Items:GetChildren().." items.")
 
-		task.delay(0.4+getDataPing()*2, function()
-			if workspace:FindFirstChild("Lobby") then
-				pivotModelTo(Character, cachedCFrame, true)
-			end
-		end)
-	end
-
-	local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
-	print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
-
-	-- Hold our ground!
-	if doBruteForcePickup then
-		HumanoidRootPart.Anchored = true
-	end
+	HumanoidRootPart.Anchored = true
 
 	for _,v in workspace.Items:GetChildren() do
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
-			Events.Item:FireServer(v.Handle)
+			--Events.Item:FireServer(v.Handle)
 			v.Handle.Massless = true
+			v.Handle.Anchored = false
+			v.Handle.CFrame = HumanoidRootPart.CFrame
 			
-			if doBruteForcePickup then 
-				v.Handle.Anchored = false
-				v.Handle.CFrame = HumanoidRootPart.CFrame
-				Humanoid:EquipTool(v)
-			end
-
+			Humanoid:EquipTool(v)
+			Humanoid:UnequipTools()
+			
 			v.AncestryChanged:Connect(function(_, p)
 				if p ~= Character then return end
 				print("Auto-activate "..v.Name)
@@ -203,9 +177,9 @@ if getgenv().itemVacEnabled then
 	HumanoidRootPart.Anchored = false
 end
 
-if getgenv().stealItems then
+--[[if getgenv().stealItems then
 	Players.DescendantAdded:Connect(stealTool)
-end
+end]]
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
 local healingItems = {"Apple", "Bandage", "Boba", "First Aid Kit", "Forcefield Crystal", "Healing Brew", "Healing Potion"}
@@ -230,11 +204,6 @@ if getgenv().safetyHeal then
 
 		debounce = false
 	end)
-end
-
-if workspace:FindFirstChild("Lobby") then
-	print("Waiting for Bus")
-	workspace.Lobby.AncestryChanged:Wait()
 end
 
 local gloveName = LocalPlr.Glove.Value
@@ -323,6 +292,7 @@ if getgenv().usePermaItems then
 	end
 end
 
+--[[
 -- Insta Win
 if getgenv().instantWin then
 	for _,plr in Players:GetPlayers() do
@@ -331,7 +301,7 @@ if getgenv().instantWin then
 			Events.Item:FireServer(plr.Character.HumanoidRootPart)
 		end
 	end
-end
+end]]
 
 -- Kill All
 if not getgenv().killAll then return end
@@ -448,12 +418,12 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
-		if itemStealsInProgress == 0 then
+		--if itemStealsInProgress == 0 then
 			pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
-		else
+		--[[else
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
-		end
+		end]]
 			
 		moveToTick = os.clock()
 		task.wait()
