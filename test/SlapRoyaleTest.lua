@@ -135,7 +135,7 @@ if getgenv().breakGame then
 	HumanoidRootPart.Anchored = true
 	
 	for i,v in workspace:GetDescendants() do
-		if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and not Players:GetPlayerFromCharacter(v.Parent) and not not Players:GetPlayerFromCharacter(v.Parent.Parent) then
+		if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and not Players:GetPlayerFromCharacter(v.Parent) and not Players:GetPlayerFromCharacter(v.Parent.Parent) then
 			Events.Item:FireServer(v)
 			v.CanCollide = false
 			v.CanTouch = false
