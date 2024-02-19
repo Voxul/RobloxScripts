@@ -149,10 +149,21 @@ end
 if getgenv().itemVacEnabled then
 	--local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
 	--print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
-	print("Item Vac started, picking up "..#workspace.Items:GetChildren().." items.")
+	print("Item Vac started")
+	
+	-- Pick up dropped items
+	workspace.Items.ChildAdded:Connect(function(c)
+		if not c:IsA("Tool") or not c:FindFirstChild("Handle") then return end
+		
+		HumanoidRootPart.Anchored = true
+		Humanoid:EquipTool(c)
+		Humanoid:UnequipTools()
+		task.wait(getDataPing())
+		Humanoid:UnequipTools()
+		HumanoidRootPart.Anchored = false
+	end)
 
 	HumanoidRootPart.Anchored = true
-
 	for _,v in workspace.Items:GetChildren() do
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			--Events.Item:FireServer(v.Handle)
