@@ -9,8 +9,9 @@
   - Use only in bus
   - Brute force pickup (prevents other exploiters from taking it before you) <sub>(has a slight kick chance tho)</sub>
   - Steals any new items (witch brews, etc)
-- Item/Glove Steal (OP) <sub>(can teleport the player, might kick you)</sub>
-- Game Breaker (OP) (no one except you gets gloves)
+- Item Steal (OP) <sub>(can teleport the player, might kick you)</sub>
+- Glove Steal (OP) (no one except you gets gloves)
+- Game Breaker (OP) (breaks the entire map)
 - Bus bomb
 - Auto permanent true power
 - Auto use permanent items
@@ -19,8 +20,9 @@
 - Auto-Heal <sub>(heals you automatically on low HP)</sub>
   - Configurable trigger health value
   - Configurable safe health value
-- Kill All/Auto Win (OP) <sub>(recommend to use item vac with this)</sub>
+- Kill All (OP) <sub>(recommend to use item vac with this)</sub>
   - Configurable move speed
+- Instant Win **(OP)**
 
 ## Execution Instruct:
 go to the loadstring file and copy it into your executor, you can change the getgenv() settings (do not touch getgenv().SRCheatConfigured)
