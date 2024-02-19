@@ -18,6 +18,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
 	getgenv().usePermaItems = true
+	
+	getgenv().instantWin = false -- Kills everyone instantly
 
 	getgenv().instantBusJump = true
 	getgenv().teleportToGroundOnBusJump = true
@@ -230,6 +232,7 @@ if workspace:FindFirstChild("Lobby") then
 	workspace.Lobby.AncestryChanged:Wait()
 end
 
+local gloveName = LocalPlr.Glove.Value
 if getgenv().bombBus then
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
@@ -238,10 +241,6 @@ if getgenv().bombBus then
 		end
 	end
 end
-
-
-
-local gloveName = LocalPlr.Glove.Value
 
 if getgenv().permaTruePower then
 	task.wait()
@@ -315,6 +314,16 @@ if getgenv().usePermaItems then
 		if v:IsA("Tool") and table.find(permanentItems, v.Name) then
 			Humanoid:EquipTool(v)
 			v:Activate()
+		end
+	end
+end
+
+-- Insta Win
+if getgenv().instantWin then
+	for _,plr in Players:GetPlayers() do
+		if plr ~= LocalPlr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+			Events.Item:FireServer(plr.Character.Head)
+			Events.Item:FireServer(plr.Character.HumanoidRootPart)
 		end
 	end
 end
