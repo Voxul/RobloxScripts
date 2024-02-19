@@ -9,6 +9,8 @@ getgenv().itemVacAllowBruteForce = true
 
 getgenv().stealItems = false -- Steals items from other players (including their gloves)
 
+getgenv().breakGame = false -- breaks the game
+
 getgenv().bombBus = true
 getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
 getgenv().usePermaItems = true
