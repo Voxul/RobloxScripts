@@ -7,7 +7,7 @@ getgenv().itemVacHidePlayer = true
 getgenv().itemVacWaitForBus = false -- This will override itemVacHidePlayer
 getgenv().itemVacAllowBruteForce = true
 
-getgenv().stealGloves = true -- Item vac needs to be enabled.
+getgenv().stealItems = false -- Steals items from other players (including their gloves)
 
 getgenv().bombBus = true
 getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
