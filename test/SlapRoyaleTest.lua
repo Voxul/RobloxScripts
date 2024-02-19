@@ -107,7 +107,8 @@ local function stealTool(tool:Tool)
 				local original = HumanoidRootPart.CFrame
 				local toolHandle = tool.Handle
 				
-				while tool.Parent ~= LocalPlr.Backpack do
+				local timeOutTick = os.clock()
+				while tool and tool.Parent ~= LocalPlr.Backpack and os.clock()-timeOutTick < 1 do
 					pivotModelTo(Character, original, true)
 					toolHandle.CFrame = original
 					task.wait()
