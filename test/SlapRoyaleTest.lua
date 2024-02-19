@@ -136,10 +136,11 @@ if getgenv().breakGame then
 		HumanoidRootPart.Anchored = true
 		
 		for i,v in workspace:GetDescendants() do
-			if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and not Players:FindFirstChild(v:FindFirstAncestorWhichIsA("Model").Name or "") then
+			if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and not Players:GetPlayerFromCharacter(v:FindFirstAncestorOfClass("Model")) then
 				Events.Item:FireServer(v)
 				v.CanCollide = false
-				if i%10 == 0 then
+				v.CanTouch = false
+				if i%6 == 0 then
 					task.wait()
 				end
 			end
