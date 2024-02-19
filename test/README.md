@@ -10,6 +10,7 @@
   - Brute force pickup (prevents other exploiters from taking it before you) <sub>(has a slight kick chance tho)</sub>
   - Steals any new items (witch brews, etc)
 - Item/Glove Steal (OP) <sub>(can teleport the player, might kick you)</sub>
+- Game Breaker (OP) (no one except you gets gloves)
 - Bus bomb
 - Auto permanent true power
 - Auto use permanent items
