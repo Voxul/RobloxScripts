@@ -193,10 +193,10 @@ local healingItems = {"Apple", "Bandage", "Boba", "First Aid Kit", "Forcefield C
 if getgenv().safetyHeal then
 	local debounce = false
 	Humanoid.HealthChanged:Connect(function(health)
-		if debounce then return end
+		if debounce or Character:FindFirstChild("Dead") then return end
 		debounce = true
 
-		if health > getgenv().healthLow then return end
+		if health > getgenv().healthLow then return end 
 
 		for _,v in LocalPlr.Backpack:GetChildren() do
 			if v:IsA("Tool") and table.find(healingItems, v.Name) then
@@ -204,7 +204,7 @@ if getgenv().safetyHeal then
 				v:Activate()
 
 				task.wait(getDataPing()+0.05)
-				if Humanoid.Health >= getgenv().healthOk then break end
+				if Humanoid.Health >= getgenv().healthOk or Character:FindFirstChild("Dead") then break end
 			end
 		end
 
