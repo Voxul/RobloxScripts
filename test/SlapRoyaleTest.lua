@@ -216,9 +216,9 @@ if getgenv().safetyHeal then
 	local debounce = false
 	Humanoid.HealthChanged:Connect(function(health)
 		if debounce or Character:FindFirstChild("Dead") then return end
-		debounce = true
-
 		if health > getgenv().healthLow then return end 
+		
+		debounce = true
 
 		for _,v in LocalPlr.Backpack:GetChildren() do
 			if v:IsA("Tool") and table.find(healingItems, v.Name) then
