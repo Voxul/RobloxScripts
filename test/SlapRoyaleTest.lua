@@ -151,30 +151,30 @@ if getgenv().itemVacEnabled then
 	--local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
 	--print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
 	print("Item Vac started")
-	
+
 	-- Pick up dropped items
 	workspace.Items.ChildAdded:Connect(function(c)
 		if not c:IsA("Tool") or not c:FindFirstChild("Handle") then return end
-		
+
 		itemPickupInProgress = true
-		
+
 		c.Handle.Massless = true
 		c.Handle.Anchored = false
 		c.Handle.CFrame = HumanoidRootPart.CFrame
-		
+
 		HumanoidRootPart.Anchored = true
 		Humanoid:EquipTool(c)
 		Humanoid:UnequipTools()
 		task.wait(getDataPing())
 		Humanoid:UnequipTools()
 		HumanoidRootPart.Anchored = false
-		
+
 		c.AncestryChanged:Connect(function(_, p)
 			if p ~= Character then return end
 			print("Auto-activate "..c.Name)
 			task.defer(c.Activate, c)
 		end)
-		
+
 		itemPickupInProgress = false
 	end)
 
@@ -185,10 +185,10 @@ if getgenv().itemVacEnabled then
 			v.Handle.Massless = true
 			v.Handle.Anchored = false
 			v.Handle.CFrame = HumanoidRootPart.CFrame
-			
+
 			Humanoid:EquipTool(v)
 			Humanoid:UnequipTools()
-			
+
 			v.AncestryChanged:Connect(function(_, p)
 				if p ~= Character then return end
 				print("Auto-activate "..v.Name)
@@ -196,12 +196,12 @@ if getgenv().itemVacEnabled then
 			end)
 		end
 	end
-	
+
 	Humanoid:UnequipTools()
 	task.wait(getDataPing())
 	Humanoid:UnequipTools()
 	HumanoidRootPart.Anchored = false
-	
+
 	task.wait(getDataPing())
 end
 
@@ -217,7 +217,7 @@ if getgenv().safetyHeal then
 	Humanoid.HealthChanged:Connect(function(health)
 		if debounce or Character:FindFirstChild("Dead") then return end
 		if health > getgenv().healthLow then return end 
-		
+
 		debounce = true
 
 		for _,v in LocalPlr.Backpack:GetChildren() do
@@ -450,10 +450,11 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			else
 				warn("Glove Not Found!")
 				task.wait(.5)
+				moveToStart = os.clock()
 				continue
 			end
 		end
-		
+
 		if not itemPickupInProgress then
 			pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 		else
@@ -461,7 +462,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
 			moveToStart = os.clock()
 		end
-			
+
 		moveToTick = os.clock()
 		task.wait()
 	end
