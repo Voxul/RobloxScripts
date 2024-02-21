@@ -451,6 +451,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				warn("Glove Not Found!")
 				task.wait(.5)
 				moveToStart = os.clock()
+				moveToTick = os.clock()
 				continue
 			end
 		end
