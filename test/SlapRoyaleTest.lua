@@ -441,7 +441,9 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			if LocalPlr.Backpack:FindFirstChild(gloveName) then
 				Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 			else
-				error("Glove missing!")
+				warn("Glove Not Found!")
+				task.wait(.5)
+				continue
 			end
 		end
 		
