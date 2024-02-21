@@ -418,6 +418,13 @@ task.spawn(function()
 	end
 end)
 
+-- Disable Player Collisions
+for _,v in Character:GetChildren() do
+	if v:IsA("BasePart") then
+		v.CanCollide = false
+	end
+end
+
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
