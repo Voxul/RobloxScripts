@@ -467,5 +467,10 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		moveToTick = os.clock()
 		task.wait()
 	end
+	
+	if HumanoidRootPart.Position.Y < -165 then
+		pivotModelTo(Character, HumanoidRootPart.CFrame - Vector3.new(0, HumanoidRootPart.Position.Y + 100, 0), true)
+	end
+	
 	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position, ignore)
 end
