@@ -479,7 +479,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		else
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
-			moveToStart = os.clock()
 		end
 
 		moveToTick = os.clock()
