@@ -164,33 +164,9 @@ if getgenv().itemVacEnabled then
 	print("Item Vac started")
 
 	-- Pick up dropped items
-	workspace.Items.ChildAdded:Connect(function(c)
-		if not c:IsA("Tool") or not c:FindFirstChild("Handle") then return end
-
+	local function pickUpTool(v:Tool)
 		itemPickupInProgress = true
-
-		c.Handle.Massless = true
-		c.Handle.Anchored = false
-		c.Handle.CFrame = HumanoidRootPart.CFrame
-
-		HumanoidRootPart.Anchored = true
-		Humanoid:EquipTool(c)
-		Humanoid:UnequipTools()
-		task.wait(getDataPing())
-		Humanoid:UnequipTools()
-		HumanoidRootPart.Anchored = false
-
-		c.AncestryChanged:Connect(function(_, p)
-			if p ~= Character then return end
-			print("Auto-activate "..c.Name)
-			task.defer(c.Activate, c)
-		end)
-
-		itemPickupInProgress = false
-	end)
-
-	HumanoidRootPart.Anchored = true
-	for _,v in workspace.Items:GetChildren() do
+		
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			--Events.Item:FireServer(v.Handle)
 			v.Handle.Massless = true
@@ -206,14 +182,22 @@ if getgenv().itemVacEnabled then
 				task.defer(v.Activate, v)
 			end)
 		end
+		
+		itemPickupInProgress = false
+	end
+	
+	workspace.Items.ChildAdded:Connect(pickUpTool)
+
+	HumanoidRootPart.Anchored = true
+	for _,v in workspace.Items:GetChildren() do
+		pickUpTool(v)
 	end
 
 	Humanoid:UnequipTools()
 	task.wait(getDataPing())
 	Humanoid:UnequipTools()
 	HumanoidRootPart.Anchored = false
-
-	task.wait(getDataPing())
+	task.wait(0.2+getDataPing())
 end
 
 --[[if getgenv().stealItems then
@@ -247,6 +231,8 @@ end
 
 local gloveName = LocalPlr.Glove.Value
 if getgenv().bombBus then
+	task.wait()
+	
 	local bombsExploded = 0
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
@@ -256,7 +242,7 @@ if getgenv().bombBus then
 			bombsExploded += 1
 			if bombsExploded%4 == 3 and getgenv().safetyHeal then
 				Humanoid.HealthChanged:Wait()
-				task.wait(0.05)
+				task.wait(getDataPing())
 			end
 		end
 	end
@@ -276,7 +262,7 @@ if getgenv().permaTruePower then
 				Humanoid:EquipTool(v)
 				v:Activate()
 
-				task.wait(5.5 + getDataPing())
+				task.wait(5.2 + getDataPing())
 				break
 			end
 
