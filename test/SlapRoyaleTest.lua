@@ -274,15 +274,15 @@ end
 
 if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
 	task.wait(getDataPing() + 0.05)
+	if getgenv().busJumpLegitMode then
+		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
+	end
+	
 	while Character.Ragdolled.Value do
 		task.wait()
 	end
-
-	Events.BusJumping:FireServer()
 	
-	if getgenv().busJumpLegitMode then
-		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt") and LocalPlr.PlayerGui.JumpPrompt.Enabled == true
-	end
+	Events.BusJumping:FireServer()
 
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
@@ -315,14 +315,8 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 	end
 
 	task.spawn(function()
-		if LocalPlr.PlayerGui:WaitForChild("JumpPrompt").Enabled then
-			LocalPlr.PlayerGui.JumpPrompt.Enabled = false
-			return
-		end
-		
-		LocalPlr.PlayerGui:WaitForChild("JumpPrompt"):GetPropertyChangedSignal("Enabled"):Once(function()
-			LocalPlr.PlayerGui.JumpPrompt.Enabled = false
-		end)
+		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
+		LocalPlr.PlayerGui.JumpPrompt:Destroy()
 	end)
 end
 
