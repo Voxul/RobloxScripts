@@ -236,10 +236,17 @@ end
 
 local gloveName = LocalPlr.Glove.Value
 if getgenv().bombBus then
+	local bombsExploded = 0
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
 			Humanoid:EquipTool(v)
 			v:Activate()
+			
+			bombsExploded += 1
+			if bombsExploded%4 == 3 and getgenv().safetyHeal then
+				Humanoid.HealthChanged:Wait()
+				task.wait(0.05)
+			end
 		end
 	end
 end
@@ -258,7 +265,7 @@ if getgenv().permaTruePower then
 				Humanoid:EquipTool(v)
 				v:Activate()
 
-				task.wait(5.2)
+				task.wait(5.2 + getDataPing())
 				break
 			end
 
