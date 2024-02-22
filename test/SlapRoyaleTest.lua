@@ -85,7 +85,7 @@ end
 if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
 	local ogCFrame = HumanoidRootPart.CFrame
 	while workspace:FindFirstChild("Lobby") do
-		pivotModelTo(Character, ogCFrame + Vector3.new(math.random(), 100, math.random()), true)
+		pivotModelTo(Character, ogCFrame + Vector3.new(math.random(), 200, math.random()), true)
 		task.wait()
 	end
 end
