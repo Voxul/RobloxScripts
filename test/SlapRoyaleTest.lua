@@ -281,7 +281,7 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 	Events.BusJumping:FireServer()
 	
 	if getgenv().busJumpLegitMode then
-		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
+		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt") and LocalPlr.PlayerGui.JumpPrompt.Enabled == true
 	end
 
 	if getgenv().teleportToGroundOnBusJump then
@@ -316,7 +316,7 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 
 	task.spawn(function()
 		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
-		LocalPlr.PlayerGui.JumpPrompt:Destroy()
+		LocalPlr.PlayerGui.JumpPrompt.Enabled = false
 	end)
 end
 
