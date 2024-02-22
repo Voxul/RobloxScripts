@@ -2,10 +2,11 @@
 
 ## Current Features:
 - Anti-Acid/Anti-Lava/Anti-Barrier
-  - Touch disabling
-  - Set part solid <sub>(so you can walk on it)</sub>
+  - Touch disable Mode
+  - Hazard CanCollide Mode <sub>(so you can walk on it)</sub>
+- Lobby Player Hider <sub>(hides you when in lobby)</sub>
 - Item Vacuum <sub>workaround found!</sub>
-  - Steals any new items (witch brews, etc) (Dropped items only)
+  - Also steals any dropped items <sub>(witch brews, etc)</sub>
 - ~~Item Steal (OP) <sub>(can teleport the player, might kick you)</sub>~~ (PATCHED)
 - ~~Glove Steal (OP) (no one except you gets gloves)~~ (PATCHED)
 - ~~Game Breaker (OP) (breaks the entire map)~~ (PATCHED)
@@ -13,7 +14,8 @@
 - Auto permanent true power
 - Auto use permanent items
 - Instant Bus Jump
-  - Instant Land <sub>(teleports you to the ground)</sub>
+  - Instant Land Mode <sub>(teleports you to the ground)</sub>
+  - Legit Mode <sub>(waits until a normal jump is possible)</sub>
 - Auto-Heal <sub>(heals you automatically on low HP)</sub>
   - Configurable trigger health value
   - Configurable safe health value
