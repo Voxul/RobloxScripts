@@ -15,6 +15,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().usePermaItems = true
 
 	getgenv().instantBusJump = true
+	getgenv().busJumpLegitMode = false
 	getgenv().teleportToGroundOnBusJump = true
 
 	getgenv().safetyHeal = true
@@ -271,13 +272,17 @@ if getgenv().permaTruePower then
 	end
 end
 
-if getgenv().instantBusJump then
+if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
 	task.wait(getDataPing() + 0.05)
 	while Character.Ragdolled.Value do
 		task.wait()
 	end
 
 	Events.BusJumping:FireServer()
+	
+	if getgenv().busJumpLegitMode then
+		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
+	end
 
 	if getgenv().teleportToGroundOnBusJump then
 		local rayParam = RaycastParams.new()
@@ -316,6 +321,10 @@ if getgenv().instantBusJump then
 end
 
 if getgenv().usePermaItems then
+	if gloveName == "Pack-A-Punch" then
+		repeat task.wait() until LocalPlr.Backpack:FindFirstChild("Pack-A-Punch") or Character:FindFirstChild("Pack-A-Punch")
+	end
+	
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and table.find(permanentItems, v.Name) then
 			Humanoid:EquipTool(v)
