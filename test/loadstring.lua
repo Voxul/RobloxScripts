@@ -18,7 +18,7 @@ getgenv().healthLow = 30
 getgenv().healthOk = 80
 
 getgenv().killAll = true
-getgenv().killAllStudsPerSecond = 425
+getgenv().killAllStudsPerSecond = 420
 
 if getgenv().SRCheatConfigured then return end
 getgenv().SRCheatConfigured = true
