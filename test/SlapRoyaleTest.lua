@@ -5,7 +5,9 @@ if not getgenv().SRCheatConfigured then
 
 	getgenv().disableBarriers = true
 	getgenv().hazardCollision = true
-
+	
+	getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
+	
 	getgenv().itemVacEnabled = true
 
 	getgenv().bombBus = true
@@ -80,6 +82,15 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
+if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
+	local hideTPStart = os.clock()
+	while os.clock()-hideTPStart < getDataPing() do
+		pivotModelTo(Character, HumanoidRootPart.CFrame + Vector3.new(0, 100, 0), true)
+		task.wait()
+	end
+	HumanoidRootPart.Anchored = true
+end
+
 --[[local itemStealsInProgress = 0
 local function stealTool(tool:Tool)
 	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and not tool:FindFirstChild("Glove") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
@@ -145,6 +156,7 @@ if workspace:FindFirstChild("Lobby") then
 	print("Waiting for Bus")
 	workspace.Lobby.AncestryChanged:Wait()
 end
+HumanoidRootPart.Anchored = false
 
 local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
@@ -265,7 +277,7 @@ if getgenv().permaTruePower then
 				Humanoid:EquipTool(v)
 				v:Activate()
 
-				task.wait(5.2 + getDataPing())
+				task.wait(5.5 + getDataPing())
 				break
 			end
 
