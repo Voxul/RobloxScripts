@@ -84,12 +84,10 @@ end
 
 if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
 	local ogCFrame = HumanoidRootPart.CFrame
-	local hideTPStart = os.clock()
-	while os.clock()-hideTPStart < getDataPing() do
-		pivotModelTo(Character, ogCFrame + Vector3.new(0, 100, 0), true)
+	while workspace:FindFirstChild("Lobby") do
+		pivotModelTo(Character, ogCFrame + Vector3.new(math.random(), 100, math.random()), true)
 		task.wait()
 	end
-	HumanoidRootPart.Anchored = true
 end
 
 --[[local itemStealsInProgress = 0
