@@ -468,18 +468,17 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			else
 				warn("Glove Not Found!")
 				task.wait(.5)
-				moveToStart = os.clock()
-				moveToTick = os.clock()
-				continue
+				break
 			end
 		end
 
-		if not itemPickupInProgress then
-			pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
-		else
+		if itemPickupInProgress then
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
 			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+			break
 		end
+		
+		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 
 		moveToTick = os.clock()
 		task.wait()
