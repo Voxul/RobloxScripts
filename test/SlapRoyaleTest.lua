@@ -315,8 +315,14 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 	end
 
 	task.spawn(function()
-		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
-		LocalPlr.PlayerGui.JumpPrompt.Enabled = false
+		if LocalPlr.PlayerGui:WaitForChild("JumpPrompt").Enabled then
+			LocalPlr.PlayerGui.JumpPrompt.Enabled = false
+			return
+		end
+		
+		LocalPlr.PlayerGui:WaitForChild("JumpPrompt"):GetPropertyChangedSignal("Enabled"):Once(function()
+			LocalPlr.PlayerGui.JumpPrompt.Enabled = false
+		end)
 	end)
 end
 
