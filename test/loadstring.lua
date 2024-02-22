@@ -11,6 +11,7 @@ getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
 getgenv().usePermaItems = true
 
 getgenv().instantBusJump = true
+getgenv().busJumpLegitMode = false
 getgenv().teleportToGroundOnBusJump = true
 
 getgenv().safetyHeal = true
