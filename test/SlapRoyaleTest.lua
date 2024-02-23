@@ -23,6 +23,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().healthOk = 80
 
 	getgenv().killAll = true
+	getgenv().killAllInitDelay = 10
 	getgenv().killAllStudsPerSecond = 420
 	getgenv().killAllHitOptimizationEnabled = true
 end
@@ -484,7 +485,7 @@ while task.wait(0.05) and not Character:FindFirstChild("Dead") do
 		end
 		
 		moveToTick = os.clock()
-		task.wait()
+		task.wait(getgenv().killAllInitDelay)
 	end
 	
 	if HumanoidRootPart.Position.Y < -165 then
