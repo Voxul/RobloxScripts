@@ -20,6 +20,7 @@ getgenv().healthOk = 80
 
 getgenv().killAll = true
 getgenv().killAllStudsPerSecond = 420
+getgenv().killAllHitOptimizationEnabled = true
 
 if getgenv().SRCheatConfigured then return end
 getgenv().SRCheatConfigured = true
