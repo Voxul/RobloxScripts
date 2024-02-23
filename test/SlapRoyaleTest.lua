@@ -477,13 +477,13 @@ while not Character:FindFirstChild("Dead") do
 		
 		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 		
-		if hitOptimizationEnabled and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.5 then
+		moveToTick = os.clock()
+		task.wait()
+		
+		if hitOptimizationEnabled and target:FindFirstChild("HumanoidRootPart") and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.3 then
 			ignore = target
 			break
 		end
-		
-		moveToTick = os.clock()
-		task.wait()
 	end
 	
 	if HumanoidRootPart.Position.Y < -165 then
