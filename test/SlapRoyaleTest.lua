@@ -442,7 +442,7 @@ end
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local hitOptimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-while task.wait() and not Character:FindFirstChild("Dead") do
+while task.wait(0.05) and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		continue 
@@ -477,13 +477,13 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		
 		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, math.min((moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick), 1)), true)
 		
-		moveToTick = os.clock()
-		task.wait()
-		
 		if hitOptimizationEnabled and target:FindFirstChild("HumanoidRootPart") and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.5 then
 			ignore = target
 			break
 		end
+		
+		moveToTick = os.clock()
+		task.wait()
 	end
 	
 	if HumanoidRootPart.Position.Y < -165 then
