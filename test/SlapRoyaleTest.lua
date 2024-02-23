@@ -442,7 +442,7 @@ end
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local hitOptimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-while not Character:FindFirstChild("Dead") do
+while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		continue 
@@ -480,7 +480,7 @@ while not Character:FindFirstChild("Dead") do
 		moveToTick = os.clock()
 		task.wait()
 		
-		if hitOptimizationEnabled and target:FindFirstChild("HumanoidRootPart") and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.3 then
+		if hitOptimizationEnabled and target:FindFirstChild("HumanoidRootPart") and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.5 then
 			ignore = target
 			break
 		end
