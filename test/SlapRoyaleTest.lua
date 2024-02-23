@@ -261,6 +261,7 @@ if getgenv().permaTruePower then
 
 				Humanoid:EquipTool(firstTruePower)
 				firstTruePower:Activate()
+				task.wait(0.3)
 				Humanoid:EquipTool(v)
 				v:Activate()
 
