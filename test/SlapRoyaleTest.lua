@@ -441,10 +441,15 @@ for _,v in Character:GetChildren() do
 	end
 end
 
+-- Additional stuff
+Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local hitOptimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-while task.wait(0.05) and not Character:FindFirstChild("Dead") do
+while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		continue 
