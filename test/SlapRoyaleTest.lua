@@ -24,6 +24,7 @@ if not getgenv().SRCheatConfigured then
 
 	getgenv().killAll = true
 	getgenv().killAllStudsPerSecond = 420
+	getgenv().killAllHitOptimizationEnabled = true
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -439,8 +440,9 @@ for _,v in Character:GetChildren() do
 end
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
+local hitOptimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-while task.wait() and not Character:FindFirstChild("Dead") do
+while not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		continue 
@@ -462,7 +464,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 			else
 				warn("Glove Not Found!")
-				task.wait(.5)
+				task.wait(0.5)
 				break
 			end
 		end
@@ -474,9 +476,14 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		end
 		
 		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
-
+		
+		if hitOptimizationEnabled and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.5 then
+			ignore = target
+			break
+		end
+		
 		moveToTick = os.clock()
-		task.wait(.05)
+		task.wait()
 	end
 	
 	if HumanoidRootPart.Position.Y < -165 then
