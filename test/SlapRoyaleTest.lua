@@ -411,7 +411,7 @@ local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Mode
 	return closest, closestMagnitude
 end
 
-task.wait(15)
+task.wait(getgenv().killAllInitDelay)
 print("Initialize kill all")
 
 Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
