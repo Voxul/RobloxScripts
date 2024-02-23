@@ -485,7 +485,7 @@ while task.wait(0.05) and not Character:FindFirstChild("Dead") do
 		end
 		
 		moveToTick = os.clock()
-		task.wait(getgenv().killAllInitDelay)
+		task.wait()
 	end
 	
 	if HumanoidRootPart.Position.Y < -165 then
