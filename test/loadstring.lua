@@ -19,6 +19,7 @@ getgenv().healthLow = 30
 getgenv().healthOk = 80
 
 getgenv().killAll = true
+getgenv().killAllInitDelay = 10
 getgenv().killAllStudsPerSecond = 420
 getgenv().killAllHitOptimizationEnabled = true
 
