@@ -476,7 +476,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, (moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick)), true)
 
 		moveToTick = os.clock()
-		task.wait()
+		task.wait(.05)
 	end
 	
 	if HumanoidRootPart.Position.Y < -165 then
