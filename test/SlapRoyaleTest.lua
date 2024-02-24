@@ -88,9 +88,10 @@ if getgenv().disableBarriers then
 end
 
 if getgenv().disableVotekicks then
+	warn("Votekick Disabling Enabled!")
 	task.spawn(function()
-		while task.wait(0.1) do
-			Events.Votekick:FireServer(game, false, 2)
+		while task.wait() do
+			Events.Votekick:FireServer(LocalPlr, false, 2)
 		end
 	end)
 end
