@@ -6,7 +6,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().disableBarriers = true
 	getgenv().hazardCollision = true
 	
-	getgenv().disableVotekicks = true
+	getgenv().experiment = true
 	
 	getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
 	
@@ -87,11 +87,15 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-if getgenv().disableVotekicks then
-	warn("Votekick Disabling Enabled!")
+if getgenv().experiment then
+	warn("Votekick Experiment Enabled!")
 	task.spawn(function()
-		while task.wait() do
-			Events.Votekick:FireServer(LocalPlr, false, 2)
+		while task.wait(0.5) do
+			for _, plr in Players:GetPlayers() do
+				if plr == LocalPlr then continue end
+				Events.Votekick:FireServer(plr.Name, false, 2)
+				Events.Votekick:FireServer(plr.Name, true, true)
+			end
 		end
 	end)
 end
