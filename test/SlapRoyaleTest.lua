@@ -26,8 +26,6 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllInitDelay = 10
 	getgenv().killAllStudsPerSecond = 420
 	getgenv().killAllHitOptimizationEnabled = true
-	
-	getgenv().experiment = false
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
