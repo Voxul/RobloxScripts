@@ -87,20 +87,6 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-if getgenv().experiment then
-	warn("Votekick Experiment Enabled!")
-	task.spawn(function()
-		while task.wait(0.5) do
-			for _, plr in Players:GetPlayers() do
-				if plr == LocalPlr then continue end
-				Events.Votekick:FireServer(plr)
-				Events.Votekick:FireServer(plr.Name, false, 69)
-				task.wait()
-			end
-		end
-	end)
-end
-
 if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
 	local ogCFrame = HumanoidRootPart.CFrame
 	while workspace:FindFirstChild("Lobby") do
@@ -175,6 +161,17 @@ if workspace:FindFirstChild("Lobby") then
 	workspace.Lobby.AncestryChanged:Wait()
 end
 HumanoidRootPart.Anchored = false
+
+if getgenv().experiment then
+	warn("Experiment Enabled!")
+	for _,v in game.Players:GetPlayers() do
+		if v==LocalPlr or not v.Character then continue end
+		for _,v1 in v.Character:GetChildren() do
+			if not v1:IsA("BasePart") then continue end
+			Events.Item:FireServer(v1)
+		end
+	end
+end
 
 local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
