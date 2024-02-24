@@ -94,7 +94,7 @@ if getgenv().experiment then
 			for _, plr in Players:GetPlayers() do
 				if plr == LocalPlr then continue end
 				Events.Votekick:FireServer(plr)
-				Events.Votekick:FireServer(plr.Name, false, 3)
+				Events.Votekick:FireServer(plr.Name, false, 69)
 				task.wait()
 			end
 		end
