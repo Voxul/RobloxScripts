@@ -6,8 +6,6 @@ if not getgenv().SRCheatConfigured then
 	getgenv().disableBarriers = true
 	getgenv().hazardCollision = true
 	
-	getgenv().experiment = false
-	
 	getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
 	
 	getgenv().itemVacEnabled = true
@@ -28,6 +26,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllInitDelay = 10
 	getgenv().killAllStudsPerSecond = 420
 	getgenv().killAllHitOptimizationEnabled = true
+	
+	getgenv().experiment = false
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -88,10 +88,10 @@ if getgenv().disableBarriers then
 end
 
 if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
+	print("Player hider enabled!")
 	local ogCFrame = HumanoidRootPart.CFrame
-	while workspace:FindFirstChild("Lobby") do
+	while workspace:FindFirstChild("Lobby") and task.wait() do
 		pivotModelTo(Character, ogCFrame + Vector3.new(math.random(), 150, math.random()), true)
-		task.wait()
 	end
 end
 
