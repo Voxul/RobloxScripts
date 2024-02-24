@@ -2,6 +2,8 @@ if game.PlaceId ~= 9431156611 then return end
 getgenv().disableBarriers = true
 getgenv().hazardCollision = true
 
+getgenv().disableVotekicks = true
+
 getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
 
 getgenv().itemVacEnabled = true
