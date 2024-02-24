@@ -88,11 +88,11 @@ if getgenv().disableBarriers then
 end
 
 if getgenv().disableVotekicks then
-	for _,plr in Players:GetPlayers() do
-		if plr == LocalPlr then continue end
-		Events.Votekick:FireServer(plr, false, 2)
-		Events.Votekick:FireServer(plr.Name, false, 2)
-	end
+	task.spawn(function()
+		while task.wait(0.1) do
+			Events.Votekick:FireServer(game, false, 2)
+		end
+	end)
 end
 
 if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
