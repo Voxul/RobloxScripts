@@ -6,7 +6,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().disableBarriers = true
 	getgenv().hazardCollision = true
 	
-	getgenv().experiment = true
+	getgenv().experiment = false
 	
 	getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
 	
