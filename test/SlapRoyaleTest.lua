@@ -371,7 +371,7 @@ local function canHitChar(char:Model)
 
 	-- Position sanity
 	local CHRMPOS = charHRM.Position
-	if math.abs(CHRMPOS.X) > 2000 or math.abs(CHRMPOS.Z) > 2000 or CHRMPOS.Y < - 160 or CHRMPOS.Y > 600 then
+	if math.abs(CHRMPOS.X) > 2000 or math.abs(CHRMPOS.Z) > 2000 or CHRMPOS.Y < -180 or CHRMPOS.Y > 600 then
 		return false
 	end
 
@@ -493,7 +493,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 		task.wait()
 	end
 	
-	if HumanoidRootPart.Position.Y < -165 then
+	if HumanoidRootPart.Position.Y < -180 then
 		pivotModelTo(Character, HumanoidRootPart.CFrame - Vector3.new(0, HumanoidRootPart.Position.Y + 100, 0), true)
 	end
 	
