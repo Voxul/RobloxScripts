@@ -6,6 +6,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().disableBarriers = true
 	getgenv().hazardCollision = true
 	
+	getgenv().disableVotekicks = true
+	
 	getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
 	
 	getgenv().itemVacEnabled = true
@@ -83,6 +85,14 @@ if getgenv().disableBarriers then
 
 	workspace.Map.AntiUnderMap:ClearAllChildren()
 	print("Cleared AntiUnderMap")
+end
+
+if getgenv().disableVotekicks then
+	for _,plr in Players:GetPlayers() do
+		if plr == LocalPlr then continue end
+		Events.Votekick:FireServer(plr, false, 2)
+		Events.Votekick:FireServer(plr.Name, false, 2)
+	end
 end
 
 if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
