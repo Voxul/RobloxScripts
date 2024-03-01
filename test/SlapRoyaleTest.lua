@@ -110,14 +110,13 @@ if getgenv().itemVacEnabled then
 		itemPickupInProgress = true
 		
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
-			--Events.Item:FireServer(v.Handle)
 			v.Handle.Massless = true
 			v.Handle.Anchored = false
 			v.Handle.CFrame = HumanoidRootPart.CFrame
 
 			Humanoid:EquipTool(v)
 			Humanoid:UnequipTools()
-
+			
 			v.AncestryChanged:Connect(function(_, p)
 				if p ~= Character then return end
 				print("Auto-activate "..v.Name)
@@ -137,8 +136,8 @@ if getgenv().itemVacEnabled then
 
 	Humanoid:UnequipTools()
 	task.wait(getDataPing())
-	Humanoid:UnequipTools()
 	HumanoidRootPart.Anchored = false
+	
 	task.wait(0.2+getDataPing())
 end
 
@@ -169,8 +168,6 @@ end
 
 local gloveName = LocalPlr.Glove.Value
 if getgenv().bombBus then
-	task.wait()
-	
 	local bombsExploded = 0
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
@@ -180,15 +177,14 @@ if getgenv().bombBus then
 			bombsExploded += 1
 			if bombsExploded%4 == 3 and getgenv().safetyHeal then
 				Humanoid.HealthChanged:Wait()
-				task.wait(getDataPing())
 			end
 		end
 	end
+	
+	task.wait(getDataPing())
 end
 
 if getgenv().permaTruePower then
-	task.wait()
-
 	local firstTruePower = nil
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "True Power" then
@@ -211,7 +207,6 @@ if getgenv().permaTruePower then
 end
 
 if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
-	task.wait(getDataPing() + 0.05)
 	if getgenv().busJumpLegitMode then
 		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
 	end
@@ -229,7 +224,7 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 
 		local rayCast
 		for i = 1, 10 do
-			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-400,0), rayParam)
+			rayCast = workspace:Raycast(HumanoidRootPart.Position, Vector3.new(0,-500,0), rayParam)
 			if rayCast then break end
 			task.wait(0.01)
 		end
@@ -261,6 +256,7 @@ end
 if getgenv().usePermaItems then
 	if gloveName == "Pack-A-Punch" then
 		repeat task.wait() until LocalPlr.Backpack:FindFirstChild("Pack-A-Punch") or Character:FindFirstChild("Pack-A-Punch")
+		task.wait(0.1)
 	end
 	
 	for _,v in LocalPlr.Backpack:GetChildren() do
@@ -270,17 +266,6 @@ if getgenv().usePermaItems then
 		end
 	end
 end
-
---[[
--- Insta Win
-if getgenv().instantWin then
-	for _,plr in Players:GetPlayers() do
-		if plr ~= LocalPlr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-			Events.Item:FireServer(plr.Character.Head)
-			Events.Item:FireServer(plr.Character.HumanoidRootPart)
-		end
-	end
-end]]
 
 -- Kill All
 if not getgenv().killAll then return end
