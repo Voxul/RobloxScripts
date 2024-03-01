@@ -18,7 +18,6 @@
   - Configurable safe health value
 - Kill All (OP) <sub>(recommend to use item vac with this)</sub>
   - Configurable move speed
-- >:)
 
 ## Execution Instruct:
 go to the loadstring file and copy it into your executor, you can change the getgenv() settings (do not touch getgenv().SRCheatConfigured)
