@@ -1,11 +1,12 @@
-# SR Exploit Testing <sub>(gui not avail to public)</sub>
+# VOXUL Slap Royale Exploit Testing <sub>GUI still not public</sub>
+> Voxul aims to provide the best and most powerful exploits available.
 
 ## Current Features:
 - Anti-Acid/Anti-Lava/Anti-Barrier
   - Touch disable Mode
   - Hazard CanCollide Mode <sub>(so you can walk on it)</sub>
 - Lobby Player Hider <sub>(hides you when in lobby)</sub>
-- Item Vacuum <sub>workaround found!</sub>
+- Item Vacuum <sub>NOT patched, still works!</sub>
   - Also steals any dropped items <sub>(witch brews, etc)</sub>
 - Bus bomb
 - Auto permanent true power
