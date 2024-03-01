@@ -93,83 +93,11 @@ if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
 	end
 end
 
---[[local itemStealsInProgress = 0
-local function stealTool(tool:Tool)
-	if tool:IsA("Tool") and tool.Name ~= "Glider" and tool:FindFirstChild("Handle") and not tool:FindFirstChild("Glove") and tool.Parent ~= Character and not tool:IsDescendantOf(LocalPlr) then
-		if getgenv().stealItems and (tool.Parent:FindFirstChild("Humanoid") or tool.Parent:IsA("Backpack")) then
-			print("Stealing item from player")
-			
-			HumanoidRootPart.Anchored = true
-			tool.AncestryChanged:Connect(function(_, p)
-				if p ~= Character then return end
-				print("Auto-activate "..tool.Name)
-				task.defer(tool.Activate, tool)
-			end)
-
-			task.spawn(function()
-				itemStealsInProgress += 1
-				
-				tool.AncestryChanged:Wait()
-				print("Item steal finish")
-				
-				itemStealsInProgress -= 1
-				if itemStealsInProgress == 0 then
-					HumanoidRootPart.Anchored = false
-				end
-			end)
-		end
-		
-		tool.Handle.CFrame = HumanoidRootPart.CFrame
-		tool.Handle.Massless = true
-		Events.Item:FireServer(tool.Handle)
-	end
-end
-
-if getgenv().disableGloves then
-	for _,v in ReplicatedStorage.Gloves:GetChildren() do
-		if v:IsA("Tool") and v:FindFirstChild("Handle") then
-			Events.Item:FireServer(v.Handle)
-		end
-	end
-	warn("Gloves disabled!")
-end
-
-if getgenv().breakGame then
-	warn("!! BREAKING THE GAME !!")
-	HumanoidRootPart.Anchored = true
-	
-	for i,v in workspace:GetDescendants() do
-		if v:IsA("BasePart") and not v:IsDescendantOf(LocalPlr.Character) and not Players:GetPlayerFromCharacter(v) and not Players:GetPlayerFromCharacter(v.Parent) and not Players:GetPlayerFromCharacter(v.Parent.Parent) then
-			Events.Item:FireServer(v)
-			v.CanCollide = false
-			v.CanTouch = false
-			if i%15 == 0 then
-				task.wait()
-			end
-		end
-	end
-	task.wait(0.5 + getDataPing())
-	
-	HumanoidRootPart.Anchored = false
-	warn("Finished breaking game")
-end]]
-
 if workspace:FindFirstChild("Lobby") then
 	print("Waiting for Bus")
 	workspace.Lobby.AncestryChanged:Wait()
 end
 HumanoidRootPart.Anchored = false
-
-if getgenv().experiment then
-	warn("Experiment Enabled!")
-	for _,v in game.Players:GetPlayers() do
-		if v==LocalPlr or not v.Character then continue end
-		for _,v1 in v.Character:GetChildren() do
-			if not v1:IsA("BasePart") then continue end
-			Events.Item:FireServer(v1)
-		end
-	end
-end
 
 local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
@@ -213,10 +141,6 @@ if getgenv().itemVacEnabled then
 	HumanoidRootPart.Anchored = false
 	task.wait(0.2+getDataPing())
 end
-
---[[if getgenv().stealItems then
-	Players.DescendantAdded:Connect(stealTool)
-end]]
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
 local healingItems = {"Apple", "Bandage", "Boba", "First Aid Kit", "Forcefield Crystal", "Healing Brew", "Healing Potion"}
