@@ -26,8 +26,6 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllInitDelay = 10
 	getgenv().killAllStudsPerSecond = 420
 	getgenv().killAllHitOptimizationEnabled = true
-	
-	getgenv().invisChar = false
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -87,7 +85,8 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-if getgenv().invisChar and writefile and getcustomasset then
+-- doesn't work 😔
+--[[if getgenv().invisChar and writefile and getcustomasset then
 	print("Attempting to load hide animation")
 	for _,v in Character:GetDescendants() do
 		if v:IsA("BasePart") then
@@ -108,7 +107,7 @@ if getgenv().invisChar and writefile and getcustomasset then
 		aT:Play()
 	end)
 	aT:Play()
-end
+end]]
 
 if getgenv().hideCharacterInLobby and workspace:FindFirstChild("Lobby") then
 	print("Lobby Hider")
