@@ -2,7 +2,7 @@ if game.PlaceId ~= 9431156611 then return end
 getgenv().disableBarriers = true
 getgenv().hazardCollision = true
 
-getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
+getgenv().hideCharacterInLobby = true -- Useful for evading noobs yelling at you
 
 getgenv().itemVacEnabled = true
 
@@ -22,6 +22,8 @@ getgenv().killAll = true
 getgenv().killAllInitDelay = 10
 getgenv().killAllStudsPerSecond = 420
 getgenv().killAllHitOptimizationEnabled = true
+	
+getgenv().invisChar = false
 
 if getgenv().SRCheatConfigured then return end
 getgenv().SRCheatConfigured = true
