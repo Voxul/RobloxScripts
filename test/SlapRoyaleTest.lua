@@ -97,7 +97,7 @@ if getgenv().invisChar and writefile and getcustomasset then
 	
 	game:GetService("StarterPlayer").AllowCustomAnimations = true
 	
-	writefile("anim_hide_16603681990", game:HttpGetAsync("https://raw.githubusercontent.com/Voxul/RobloxScripts/blob/main/test/16603681990.rbxm"))
+	writefile("anim_hide_16603681990", game:HttpGetAsync("https://raw.githubusercontent.com/Voxul/RobloxScripts/main/test/16603681990.rbxm"))
 	
 	local animator:Animator = Humanoid:WaitForChild("Animator")
 	local animation = Instance.new("Animation")
