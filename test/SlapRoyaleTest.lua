@@ -87,7 +87,8 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-if getgenv().invisChar then
+if getgenv().invisChar and writefile and getcustomasset then
+	print("Attempting to load hide animation")
 	for _,v in Character:GetDescendants() do
 		if v:IsA("BasePart") then
 			v.Massless = true
@@ -96,9 +97,11 @@ if getgenv().invisChar then
 	
 	game:GetService("StarterPlayer").AllowCustomAnimations = true
 	
+	writefile("anim_hide_16603681990", game:HttpGetAsync("https://raw.githubusercontent.com/Voxul/RobloxScripts/blob/main/test/16603681990.rbxm"))
+	
 	local animator:Animator = Humanoid:WaitForChild("Animator")
 	local animation = Instance.new("Animation")
-	animation.AnimationId = "rbxassetid://16603681990"
+	animation.AnimationId = getcustomasset("anim_hide_16603681990")
 	local aT:AnimationTrack = animator:LoadAnimation(animation)
 	aT.Priority = Enum.AnimationPriority.Action4
 	aT.Stopped:Connect(function()
