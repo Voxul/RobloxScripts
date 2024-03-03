@@ -66,22 +66,24 @@ end
 
 -- Disable barriers
 if getgenv().disableBarriers then
+	local function disableTouch(part:BasePart)
+		part.CanTouch = false
+		local tT = part:FindFirstChildWhichIsA("TouchTransmitter")
+		if tT then tT:Destroy() end
+	end
+	
 	for _,v:BasePart in workspace.Map.AcidAbnormality:GetChildren() do
 		if v.Name == "Acid" and v:IsA("BasePart") and v:FindFirstChildWhichIsA("TouchTransmitter") then
-			v.CanTouch = false
+			disableTouch(v)
 			v.CanCollide = getgenv().hazardCollision
 			print("Disabled Acid")
 		end
 	end
-	workspace.Map.DragonDepths:WaitForChild("Lava").CanTouch = false
+	
+	disableTouch(workspace.Map.DragonDepths:WaitForChild("Lava"))
 	workspace.Map.DragonDepths.Lava.CanCollide = getgenv().hazardCollision
-	print("Disabled Lava")
-
-	workspace.Map.OriginOffice:WaitForChild("Antiaccess").CanTouch = false
-	print("Disabled Antiaccess")
-
+	disableTouch(workspace.Map.OriginOffice:WaitForChild("Antiaccess"))
 	workspace.Map.AntiUnderMap:ClearAllChildren()
-	print("Cleared AntiUnderMap")
 end
 
 -- doesn't work 😔
