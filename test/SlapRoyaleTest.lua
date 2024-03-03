@@ -123,13 +123,13 @@ if workspace:FindFirstChild("Lobby") then
 end
 HumanoidRootPart.Anchored = false
 
-local itemPickupInProgress = false
+--local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
 	print("Item Vac started")
 
 	-- Pick up dropped items
 	local function pickUpTool(v:Tool)
-		itemPickupInProgress = true
+		--itemPickupInProgress = true
 		
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			v.Handle.Massless = true
@@ -146,7 +146,7 @@ if getgenv().itemVacEnabled then
 			end)
 		end
 		
-		itemPickupInProgress = false
+		--itemPickupInProgress = false
 	end
 	
 	workspace.Items.ChildAdded:Connect(pickUpTool)
@@ -396,7 +396,7 @@ local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-		continue 
+		continue
 	end
 
 	local moveToStart = os.clock()
@@ -420,10 +420,10 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			end
 		end
 
-		if itemPickupInProgress then
+		--[[if itemPickupInProgress then
 			pivotModelTo(Character, HumanoidRootPart.CFrame, true)
 			break
-		end
+		end]]
 		
 		pivotModelTo(
 			Character, 
