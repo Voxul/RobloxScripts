@@ -67,11 +67,10 @@ end
 -- Disable barriers
 if getgenv().disableBarriers then
 	for _,v:BasePart in workspace.Map.AcidAbnormality:GetChildren() do
-		if v.Name == "Acid" and v.ClassName == "Part" and v:FindFirstChild("TouchInterest") then
+		if v.Name == "Acid" and v:IsA("BasePart") and v:FindFirstChildWhichIsA("TouchTransmitter") then
 			v.CanTouch = false
 			v.CanCollide = getgenv().hazardCollision
 			print("Disabled Acid")
-			break
 		end
 	end
 	workspace.Map.DragonDepths:WaitForChild("Lava").CanTouch = false
