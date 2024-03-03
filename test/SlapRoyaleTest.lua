@@ -94,6 +94,8 @@ if getgenv().invisChar then
 		end
 	end
 	
+	game:GetService("StarterPlayer").AllowCustomAnimations = true
+	
 	local animator:Animator = Humanoid:WaitForChild("Animator")
 	local animation = Instance.new("Animation")
 	animation.AnimationId = "rbxassetid://16603681990"
