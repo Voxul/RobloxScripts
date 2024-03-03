@@ -216,7 +216,7 @@ if getgenv().permaTruePower then
 
 				Humanoid:EquipTool(firstTruePower)
 				firstTruePower:Activate()
-				task.wait(0.3)
+				task.wait(0.3 + getDataPing())
 				Humanoid:EquipTool(v)
 				v:Activate()
 
