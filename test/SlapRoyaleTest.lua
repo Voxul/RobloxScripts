@@ -26,6 +26,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllInitDelay = 10
 	getgenv().killAllStudsPerSecond = 420
 	getgenv().killAllHitOptimizationEnabled = true
+	
+	getgenv().kickSpectator = false
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -206,6 +208,22 @@ if getgenv().permaTruePower then
 	end
 end
 
+if getgenv().usePermaItems then
+	task.spawn(function()
+		if gloveName == "Pack-A-Punch" then
+			repeat task.wait() until LocalPlr.Backpack:FindFirstChild("Pack-A-Punch") or Character:FindFirstChild("Pack-A-Punch")
+			task.wait(0.1)
+		end
+
+		for _,v in LocalPlr.Backpack:GetChildren() do
+			if v:IsA("Tool") and table.find(permanentItems, v.Name) then
+				Humanoid:EquipTool(v)
+				v:Activate()
+			end
+		end
+	end)
+end
+
 if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
 	if getgenv().busJumpLegitMode then
 		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
@@ -251,20 +269,6 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
 		LocalPlr.PlayerGui.JumpPrompt:Destroy()
 	end)
-end
-
-if getgenv().usePermaItems then
-	if gloveName == "Pack-A-Punch" then
-		repeat task.wait() until LocalPlr.Backpack:FindFirstChild("Pack-A-Punch") or Character:FindFirstChild("Pack-A-Punch")
-		task.wait(0.1)
-	end
-	
-	for _,v in LocalPlr.Backpack:GetChildren() do
-		if v:IsA("Tool") and table.find(permanentItems, v.Name) then
-			Humanoid:EquipTool(v)
-			v:Activate()
-		end
-	end
 end
 
 -- Kill All
