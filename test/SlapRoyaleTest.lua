@@ -421,12 +421,18 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 		end
 
 		if itemPickupInProgress then
-			HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
-			HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+			pivotModelTo(Character, HumanoidRootPart.CFrame, true)
 			break
 		end
 		
-		pivotModelTo(Character, HumanoidRootPart.CFrame:Lerp(target.HumanoidRootPart.CFrame, math.min((moveToStart/os.clock() / (target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*studsPerSecond)*(os.clock()-moveToTick), 1)), true)
+		pivotModelTo(
+			Character, 
+			HumanoidRootPart.CFrame:Lerp(
+				target.HumanoidRootPart.CFrame, 
+				math.min(studsPerSecond/(target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
+			),
+			true
+		)
 		
 		if hitOptimizationEnabled and target:FindFirstChild("HumanoidRootPart") and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.5 then
 			ignore = target
