@@ -6,7 +6,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().disableBarriers = true
 	getgenv().hazardCollision = true
 	
-	getgenv().hidePlayerInLobby = true -- Useful for evading noobs yelling at you
+	getgenv().hideCharacterInLobby = true -- Useful for evading noobs yelling at you
 	
 	getgenv().itemVacEnabled = true
 
@@ -27,7 +27,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllStudsPerSecond = 420
 	getgenv().killAllHitOptimizationEnabled = true
 	
-	getgenv().kickSpectator = false
+	getgenv().invisChar = false
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -87,8 +87,26 @@ if getgenv().disableBarriers then
 	print("Cleared AntiUnderMap")
 end
 
-if getgenv().hidePlayerInLobby and workspace:FindFirstChild("Lobby") then
-	print("Player hider enabled!")
+if getgenv().invisChar then
+	for _,v in Character:GetDescendants() do
+		if v:IsA("BasePart") then
+			v.Massless = true
+		end
+	end
+	
+	local animator:Animator = Humanoid:WaitForChild("Animator")
+	local animation = Instance.new("Animation")
+	animation.AnimationId = "rbxassetid://16603681990"
+	local aT:AnimationTrack = animator:LoadAnimation(animation)
+	aT.Priority = Enum.AnimationPriority.Action4
+	aT.Stopped:Connect(function()
+		aT:Play()
+	end)
+	aT:Play()
+end
+
+if getgenv().hideCharacterInLobby and workspace:FindFirstChild("Lobby") then
+	print("Lobby Hider")
 	local ogCFrame = HumanoidRootPart.CFrame
 	while workspace:FindFirstChild("Lobby") and task.wait() do
 		pivotModelTo(Character, ogCFrame + Vector3.new(math.random(), 150, math.random()), true)
@@ -103,8 +121,6 @@ HumanoidRootPart.Anchored = false
 
 local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
-	--local doBruteForcePickup = getgenv().itemVacAllowBruteForce and not workspace:FindFirstChild("Lobby") -- If we're in the bus, do a brute force pickup so other exploiters can't steal
-	--print("Item Vac started | doBruteForcePickup: "..tostring(doBruteForcePickup))
 	print("Item Vac started")
 
 	-- Pick up dropped items
