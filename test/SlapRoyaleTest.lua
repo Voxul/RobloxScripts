@@ -175,7 +175,7 @@ if getgenv().bombBus then
 			
 			bombsExploded += 1
 			if bombsExploded%4 == 3 and getgenv().safetyHeal then
-				Humanoid.HealthChanged:Wait()
+				task.wait(getDataPing()+0.05)
 			end
 		end
 	end
