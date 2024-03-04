@@ -420,18 +420,15 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 				break
 			end
 		end
-
-		--[[if itemPickupInProgress then
-			pivotModelTo(Character, HumanoidRootPart.CFrame, true)
-			break
-		end]]
 		
 		pivotModelTo(
 			Character, 
-			HumanoidRootPart.CFrame:Lerp(
-				target.HumanoidRootPart.CFrame, 
-				math.min(studsPerSecond/(target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
-			),
+			CFrame.new(
+				HumanoidRootPart.Position:Lerp(
+					target.HumanoidRootPart.Position,
+					math.min(studsPerSecond/(target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
+				)
+			)*CFrame.Angles(math.rad(180), 0, 0),
 			true
 		)
 		
