@@ -103,14 +103,11 @@ if workspace:FindFirstChild("Lobby") then
 end
 HumanoidRootPart.Anchored = false
 
---local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
 	print("Item Vacuuming")
 
 	-- Pick up dropped items
 	local function pickUpTool(v:Tool)
-		--itemPickupInProgress = true
-		
 		if v:IsA("Tool") and v:FindFirstChild("Handle") then
 			v.Handle.Massless = true
 			v.Handle.Anchored = false
@@ -125,8 +122,6 @@ if getgenv().itemVacEnabled then
 				task.defer(v.Activate, v)
 			end)
 		end
-		
-		--itemPickupInProgress = false
 	end
 	
 	workspace.Items.ChildAdded:Connect(pickUpTool)
@@ -226,12 +221,17 @@ if getgenv().usePermaItems then
 	end)
 end
 
-if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
-	if getgenv().busJumpLegitMode then
-		repeat task.wait() until LocalPlr.PlayerGui:FindFirstChild("JumpPrompt")
+if getgenv().useIceCubes then
+	for _,v in LocalPlr.Backpack:GetChildren() do
+		if v:IsA("Tool") and v.Name == "Cube of Ice" then
+			Humanoid:EquipTool(v)
+			v:Activate()
+		end
 	end
-	
-	while Character.Ragdolled.Value do
+end
+
+if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
+	while Character.Ragdolled.Value or getgenv().busJumpLegitMode and LocalPlr.PlayerGui:FindFirstChild("JumpPrompt") do
 		task.wait()
 	end
 	
@@ -364,6 +364,7 @@ end)
 for _,v in Character:GetChildren() do
 	if v:IsA("BasePart") then
 		v.CanCollide = false
+		v.Massless = true
 	end
 end
 
@@ -371,6 +372,7 @@ end
 Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
 Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+Humanoid.PlatformStand = true
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local hitOptimizationEnabled = getgenv().killAllHitOptimizationEnabled
