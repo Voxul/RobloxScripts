@@ -12,20 +12,22 @@ if not getgenv().SRCheatConfigured then
 
 	getgenv().bombBus = true
 	getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
-	getgenv().usePermaItems = true
+	getgenv().usePermaItems = true -- Automatically use permanent items
+	getgenv().useIceCubes = false -- Automatically use ice cubes to allow killAll/kill aura oneshots for a few hits
 
 	getgenv().instantBusJump = true
-	getgenv().busJumpLegitMode = false
-	getgenv().teleportToGroundOnBusJump = true
+	getgenv().busJumpLegitMode = false -- Waits for the jump prompt to appear
+	getgenv().instantLand = true -- Teleports you to the ground instantly
 
 	getgenv().safetyHeal = true
 	getgenv().healthLow = 30
 	getgenv().healthOk = 80
 
 	getgenv().killAll = true
-	getgenv().killAllInitDelay = 10
+	getgenv().killAllInitDelay = 5 -- How long to wait before starting
 	getgenv().killAllStudsPerSecond = 420
-	getgenv().killAllHitOptimizationEnabled = true
+	getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency
+	getgenv().killAllIgnoreGliders = true -- Ignore targets if they are gliding
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -66,6 +68,8 @@ end
 
 -- Disable barriers
 if getgenv().disableBarriers then
+	print("Disabling Barriers/Hazards")
+	
 	local function disableTouch(part:BasePart)
 		part.CanTouch = false
 		local tT = part:FindFirstChildWhichIsA("TouchTransmitter")
@@ -76,7 +80,6 @@ if getgenv().disableBarriers then
 		if v.Name == "Acid" and v:IsA("BasePart") and v:FindFirstChildWhichIsA("TouchTransmitter") then
 			disableTouch(v)
 			v.CanCollide = getgenv().hazardCollision
-			print("Disabled Acid")
 		end
 	end
 	
@@ -85,30 +88,6 @@ if getgenv().disableBarriers then
 	disableTouch(workspace.Map.OriginOffice:WaitForChild("Antiaccess"))
 	workspace.Map.AntiUnderMap:ClearAllChildren()
 end
-
--- doesn't work 😔
---[[if getgenv().invisChar and writefile and getcustomasset then
-	print("Attempting to load hide animation")
-	for _,v in Character:GetDescendants() do
-		if v:IsA("BasePart") then
-			v.Massless = true
-		end
-	end
-	
-	game:GetService("StarterPlayer").AllowCustomAnimations = true
-	
-	writefile("anim_hide_16603681990", game:HttpGetAsync("https://raw.githubusercontent.com/Voxul/RobloxScripts/main/test/16603681990.rbxm"))
-	
-	local animator:Animator = Humanoid:WaitForChild("Animator")
-	local animation = Instance.new("Animation")
-	animation.AnimationId = getcustomasset("anim_hide_16603681990")
-	local aT:AnimationTrack = animator:LoadAnimation(animation)
-	aT.Priority = Enum.AnimationPriority.Action4
-	aT.Stopped:Connect(function()
-		aT:Play()
-	end)
-	aT:Play()
-end]]
 
 if getgenv().hideCharacterInLobby and workspace:FindFirstChild("Lobby") then
 	print("Lobby Hider")
@@ -126,7 +105,7 @@ HumanoidRootPart.Anchored = false
 
 --local itemPickupInProgress = false
 if getgenv().itemVacEnabled then
-	print("Item Vac started")
+	print("Item Vacuuming")
 
 	-- Pick up dropped items
 	local function pickUpTool(v:Tool)
@@ -191,6 +170,8 @@ end
 
 local gloveName = LocalPlr.Glove.Value
 if getgenv().bombBus then
+	print("bababooey")
+	
 	local bombsExploded = 0
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
@@ -256,7 +237,7 @@ if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) 
 	
 	Events.BusJumping:FireServer()
 
-	if getgenv().teleportToGroundOnBusJump then
+	if getgenv().instantLand then
 		local rayParam = RaycastParams.new()
 		rayParam.FilterDescendantsInstances = {workspace.Terrain}
 		rayParam.FilterType = Enum.RaycastFilterType.Include
@@ -310,7 +291,7 @@ local function canHitChar(char:Model)
 	end
 
 	-- Additional checks
-	if char.Ragdolled.Value or not char.Vulnerable.Value or char:FindFirstChild("Glider") or char.Head.Transparency == 1 then 
+	if char.Ragdolled.Value or not char.Vulnerable.Value or getgenv().killAllIgnoreGliders and char:FindFirstChild("Glider") or char.Head.Transparency == 1 then 
 		return false 
 	end
 
