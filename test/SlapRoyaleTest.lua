@@ -403,7 +403,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
 			table.insert(ignores, target)
-			task.delay(1, table.remove, table.find(ignores, target))
+			task.delay(1, table.remove, ignores, table.find(ignores, target))
 			break
 		end
 
@@ -437,7 +437,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				true
 			)
 			table.insert(ignores, target)
-			task.delay(1, table.remove, table.find(ignores, target))
+			task.delay(1, table.remove, ignores, table.find(ignores, target))
 			task.wait()
 			Events.Slap:FireServer(tHumanoidRootPart)
 			break
