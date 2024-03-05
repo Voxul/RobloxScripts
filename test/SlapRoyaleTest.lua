@@ -373,12 +373,12 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
-local function getPlayerRealSpeed(plr:Player)
+local function getPlayerRealVelocity(plr:Player)
 	local speed = Vector3.zero
 	for _,v in ipairs(speedHistory[plr] or {}) do
 		speed += v
 	end
-	return (speed/realSpeedSamples).Magnitude
+	return speed/realSpeedSamples
 end
 
 -- Disable Player Collisions
@@ -426,7 +426,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + getPlayerRealSpeed(target)*getDataPing()*1.1 or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + getPlayerRealVelocity(target)*getDataPing()*1.1 or tHumanoidRootPart.Position
 		
 		pivotModelTo(
 			Character, 
