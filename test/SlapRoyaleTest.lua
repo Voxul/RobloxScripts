@@ -407,7 +407,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + tHumanoidRootPart.AssemblyLinearVelocity*getDataPing() or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + tHumanoidRootPart.AssemblyLinearVelocity*getDataPing()*1.1 or tHumanoidRootPart.Position
 		
 		pivotModelTo(
 			Character, 
