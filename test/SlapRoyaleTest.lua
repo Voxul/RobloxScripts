@@ -390,7 +390,7 @@ local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-		return
+		continue
 	end
 
 	local moveToStart = os.clock()
