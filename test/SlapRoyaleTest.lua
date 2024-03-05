@@ -36,6 +36,7 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 local Players = game:GetService("Players")
 local StatsService = game:GetService("Stats")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local Events = ReplicatedStorage.Events
 
@@ -325,8 +326,7 @@ local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Mode
 	local closest, closestMagnitude = nil, nil
 
 	for _,plr in Players:GetPlayers() do
-		if plr == LocalPlr then continue end
-		if plr.Character == ignore or not canHitChar(plr.Character) then continue end
+		if plr == LocalPlr or plr.Character == ignore or not canHitChar(plr.Character) then continue end
 
 		local magnitude = (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude
 		if not closest or magnitude < closestMagnitude then
@@ -349,17 +349,37 @@ Humanoid.Seated:Connect(function(active)
 	end
 end)
 
--- Slap Thread
-task.spawn(function()
-	while task.wait() do
-		for _,plr in Players:GetPlayers() do
-			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and not plr.Character:FindFirstChild("Dead") and (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude < 20 then
-				Events.Slap:FireServer(getModelClosestChild(plr.Character, HumanoidRootPart.Position))
-				Events.Slap:FireServer(plr.Character.HumanoidRootPart)
+local realSpeedSamples = 3 -- How many samples to take for average
+local speedHistory = {}
+RunService.Heartbeat:Connect(function()
+	for _,plr in Players:GetPlayers() do
+		local char = plr.Character
+		if not char or not char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Dead") then continue end
+
+		if (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude < 20 then
+			Events.Slap:FireServer(getModelClosestChild(plr.Character, HumanoidRootPart.Position))
+			Events.Slap:FireServer(plr.Character.HumanoidRootPart)
+		end
+
+		if getgenv().killAllLagAdjustmentEnabled then
+			if not speedHistory[plr] then
+				speedHistory[plr] = table.create(realSpeedSamples, Vector3.zero)
+				speedHistory[plr].index = 0
 			end
+
+			speedHistory[plr].index = speedHistory[plr].index%realSpeedSamples + 1
+			speedHistory[plr][speedHistory[plr].index] = plr.Character.HumanoidRootPart.Position
 		end
 	end
 end)
+
+local function getPlayerRealSpeed(plr:Player)
+	local speed = Vector3.zero
+	for _,v in ipairs(speedHistory[plr] or {}) do
+		speed += v
+	end
+	return (speed/realSpeedSamples).Magnitude
+end
 
 -- Disable Player Collisions
 for _,v in Character:GetChildren() do
@@ -376,7 +396,6 @@ Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 Humanoid.PlatformStand = true
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
-local hitOptimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 	if not target then
@@ -407,7 +426,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + tHumanoidRootPart.AssemblyLinearVelocity*getDataPing()*1.1 or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + getPlayerRealSpeed(target)*getDataPing()*1.1 or tHumanoidRootPart.Position
 		
 		pivotModelTo(
 			Character, 
@@ -420,7 +439,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			true
 		)
 		
-		if hitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
+		if getgenv().killAllHitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
 			ignore = target
 			break
 		end
