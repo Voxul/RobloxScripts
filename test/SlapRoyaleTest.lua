@@ -416,7 +416,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end
 
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (lastPositions[target].old-tHumanoidRootPart.Position)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (lastPositions[target].old-tHumanoidRootPart.Position)/lastDelta*getDataPing() or tHumanoidRootPart.Position
 
 		pivotModelTo(
 			Character, 
@@ -428,6 +428,8 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			)*CFrame.Angles(math.rad(180), 0, 0),
 			true
 		)
+		
+		Events.Slap:FireServer(tHumanoidRootPart)
 
 		if getgenv().killAllHitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
 			ignore = target
