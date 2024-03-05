@@ -387,7 +387,7 @@ end)
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-while task.wait() do
+while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		return
