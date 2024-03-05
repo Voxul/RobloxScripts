@@ -389,6 +389,8 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 
 	local ignore = nil
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
+		local tHumanoidRootPart = target.HumanoidRootPart
+		
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
 			ignore = target
@@ -405,18 +407,20 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			end
 		end
 		
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + tHumanoidRootPart.AssemblyLinearVelocity*getDataPing() or tHumanoidRootPart.Position
+		
 		pivotModelTo(
 			Character, 
 			CFrame.new(
 				HumanoidRootPart.Position:Lerp(
-					getgenv().killAllLagAdjustmentEnabled and target.HumanoidRootPart.Position + target.HumanoidRootPart.AssemblyLinearVelocity*getDataPing() or target.HumanoidRootPart.Position,
-					math.min(studsPerSecond/(target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
+					targetPosition,
+					math.min(studsPerSecond/(targetPosition-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
 				)
 			)*CFrame.Angles(math.rad(180), 0, 0),
 			true
 		)
 		
-		if hitOptimizationEnabled and target:FindFirstChild("HumanoidRootPart") and (HumanoidRootPart.Position-target.HumanoidRootPart.Position).Magnitude < 0.5 then
+		if hitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
 			ignore = target
 			break
 		end
