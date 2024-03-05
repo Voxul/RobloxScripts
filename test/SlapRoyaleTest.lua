@@ -409,7 +409,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			Character, 
 			CFrame.new(
 				HumanoidRootPart.Position:Lerp(
-					getgenv().killAllLagAdjustmentEnabled and target.HumanoidRootPart.Position + target.HumanoidRootPart.AssemblyLinearVelocity*getDataPing() or target.HumanoidRootPart.Position,
+					getgenv().killAllLagAdjustmentEnabled and target.HumanoidRootPart.Position + target.HumanoidRootPart.AssemblyLinearVelocity*getDataPing()*1.8 or target.HumanoidRootPart.Position,
 					math.min(studsPerSecond/(target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
 				)
 			)*CFrame.Angles(math.rad(180), 0, 0),
