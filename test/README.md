@@ -11,6 +11,7 @@
 - Bus bomb
 - Auto permanent true power
 - Auto use permanent items
+- Auto use ice cubes
 - Instant Bus Jump
   - Instant Land Mode <sub>(teleports you to the ground)</sub>
   - Legit Mode <sub>(waits until a normal jump is possible)</sub>
@@ -19,6 +20,7 @@
   - Configurable safe health value
 - Kill All (OP) <sub>(recommend to use item vac with this)</sub>
   - Configurable move speed
+  - Bunch of configurable optimization settings
 
 ## Execution Instruct:
 go to the loadstring file and copy it into your executor, you can change the getgenv() settings (do not touch getgenv().SRCheatConfigured)
