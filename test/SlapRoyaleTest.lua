@@ -416,7 +416,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end
 
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (lastPositions[target].old-tHumanoidRootPart.Position)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
 
 		pivotModelTo(
 			Character, 
