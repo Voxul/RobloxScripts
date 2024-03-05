@@ -355,11 +355,11 @@ for _,v in Character:GetChildren() do
 	end
 end
 
-local studsPerSecond = getgenv().killAllStudsPerSecond
-local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-
 local lastPositions = {}
+local lastDelta = 1
 RunService.Heartbeat:Connect(function(dT)
+	lastDelta = dT
+	
 	for _,plr in Players:GetPlayers() do
 		local char = plr.Character
 		if not char or not char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Dead") then continue end
@@ -383,7 +383,11 @@ RunService.Heartbeat:Connect(function(dT)
 			lastPositions[plr.Character].posBuffer = plr.Character.HumanoidRootPart.Position
 		end
 	end
-	
+end)
+
+local studsPerSecond = getgenv().killAllStudsPerSecond
+local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
+while task.wait() do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		return
@@ -412,7 +416,7 @@ RunService.Heartbeat:Connect(function(dT)
 			end
 		end
 
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/dT*getDataPing()*1.1 or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
 
 		pivotModelTo(
 			Character, 
@@ -439,4 +443,4 @@ RunService.Heartbeat:Connect(function(dT)
 	end
 
 	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position, ignore)
-end)
+end
