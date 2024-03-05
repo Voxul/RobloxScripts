@@ -322,11 +322,12 @@ local function getModelClosestChild(model:Model, position:Vector3)
 	return closestPart
 end
 
-local function getClosestHittableCharacter(position:Vector3, ignore:Model?):(Model, number)
+local ignores = {}
+local function getClosestHittableCharacter(position:Vector3):(Model, number)
 	local closest, closestMagnitude = nil, nil
 
 	for _,plr in Players:GetPlayers() do
-		if plr == LocalPlr or plr.Character == ignore or not canHitChar(plr.Character) then continue end
+		if plr == LocalPlr or table.find(ignores, plr.Character) or not canHitChar(plr.Character) then continue end
 
 		local magnitude = (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude
 		if not closest or magnitude < closestMagnitude then
@@ -364,23 +365,23 @@ RunService.Heartbeat:Connect(function(dT)
 		local char = plr.Character
 		if not char or not char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Dead") then continue end
 
-		if (plr.Character.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude < 20 then
-			Events.Slap:FireServer(getModelClosestChild(plr.Character, HumanoidRootPart.Position))
-			Events.Slap:FireServer(plr.Character.HumanoidRootPart)
+		if (char.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude < 20 then
+			Events.Slap:FireServer(getModelClosestChild(char, HumanoidRootPart.Position))
+			Events.Slap:FireServer(char.HumanoidRootPart)
 		end
 
 		if getgenv().killAllLagAdjustmentEnabled then
-			if not lastPositions[plr.Character] then
-				lastPositions[plr.Character] = {
-					posBuffer = plr.Character.HumanoidRootPart.Position,
+			if not lastPositions[char] then
+				lastPositions[char] = {
+					posBuffer = char.HumanoidRootPart.Position,
 				}
 				plr.Character.AncestryChanged:Once(function()
-					lastPositions[plr.Character] = nil
+					lastPositions[char] = nil
 				end)
 			end
 			
-			lastPositions[plr.Character].old = lastPositions[plr.Character].posBuffer
-			lastPositions[plr.Character].posBuffer = plr.Character.HumanoidRootPart.Position
+			lastPositions[char].old = lastPositions[char].posBuffer
+			lastPositions[char].posBuffer = char.HumanoidRootPart.Position
 		end
 	end
 end)
@@ -395,14 +396,14 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
-
-	local ignore = nil
+	
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
 		local tHumanoidRootPart = target.HumanoidRootPart
 
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
-			ignore = target
+			table.insert(ignores, target)
+			task.delay(1, table.remove, table.find(ignores, target))
 			break
 		end
 
@@ -428,13 +429,15 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			)*CFrame.Angles(math.rad(180), 0, 0),
 			true
 		)
+		
 		if getgenv().killAllHitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.4 then
 			pivotModelTo(
 				Character,
 				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
 				true
 			)
-			ignore = target
+			table.insert(ignores, target)
+			task.delay(1, table.remove, table.find(ignores, target))
 			task.wait()
 			Events.Slap:FireServer(tHumanoidRootPart)
 			break
@@ -448,5 +451,5 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		pivotModelTo(Character, HumanoidRootPart.CFrame - Vector3.new(0, HumanoidRootPart.Position.Y + 100, 0), true)
 	end
 
-	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position, ignore)
+	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 end
