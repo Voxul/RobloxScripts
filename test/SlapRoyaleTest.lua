@@ -4,7 +4,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().SRCheatConfigured = true
 
 	getgenv().disableBarriers = true
-	getgenv().hazardCollision = true
+	getgenv().hazardCollision = true -- Whether the hazard should be solid
 	
 	getgenv().hideCharacterInLobby = true -- Useful for evading noobs yelling at you
 	
@@ -20,14 +20,15 @@ if not getgenv().SRCheatConfigured then
 	getgenv().instantLand = true -- Teleports you to the ground instantly
 
 	getgenv().safetyHeal = true
-	getgenv().healthLow = 30
-	getgenv().healthOk = 80
+	getgenv().healthLow = 30 -- When to trigger auto-heal
+	getgenv().healthOk = 80 -- How much to heal until
 
 	getgenv().killAll = true
 	getgenv().killAllInitDelay = 5 -- How long to wait before starting
-	getgenv().killAllStudsPerSecond = 420
-	getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency
-	getgenv().killAllIgnoreGliders = true -- Ignore targets if they are gliding
+	getgenv().killAllStudsPerSecond = 420 -- How fast to go towards targets
+	getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency by not waiting for the client to know if the target got hit
+	getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
+	getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -408,7 +409,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			Character, 
 			CFrame.new(
 				HumanoidRootPart.Position:Lerp(
-					target.HumanoidRootPart.Position,
+					getgenv().killAllLagAdjustmentEnabled and target.HumanoidRootPart.Position + target.HumanoidRootPart.AssemblyLinearVelocity*getDataPing() or target.HumanoidRootPart.Position,
 					math.min(studsPerSecond/(target.HumanoidRootPart.Position-HumanoidRootPart.Position).Magnitude*(os.clock()-moveToTick),1)
 				)
 			)*CFrame.Angles(math.rad(180), 0, 0),
