@@ -322,7 +322,7 @@ local function getModelClosestChild(model:Model, position:Vector3)
 	return closestPart
 end
 
-local function getClosestHittableCharacter(position:Vector3, ignore:Model?):Model
+local function getClosestHittableCharacter(position:Vector3, ignore:Model?):(Model, number)
 	local closest, closestMagnitude = nil, nil
 
 	for _,plr in Players:GetPlayers() do
@@ -341,13 +341,22 @@ end
 task.wait(getgenv().killAllInitDelay)
 print("Initialize kill all")
 
-Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-Humanoid.Seated:Connect(function(active)
-	if active then
-		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-		Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+-- Additional stuff
+Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+Humanoid.PlatformStand = true
+
+-- Disable Player Collisions
+for _,v in Character:GetChildren() do
+	if v:IsA("BasePart") then
+		v.CanCollide = false
+		v.Massless = true
 	end
-end)
+end
+
+local studsPerSecond = getgenv().killAllStudsPerSecond
+local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 
 local lastPositions = {}
 RunService.Heartbeat:Connect(function(dT)
@@ -361,31 +370,23 @@ RunService.Heartbeat:Connect(function(dT)
 		end
 
 		if getgenv().killAllLagAdjustmentEnabled then
-			lastPositions[plr] = plr.Character.HumanoidRootPart
+			if not lastPositions[plr.Character] then
+				lastPositions[plr.Character] = {
+					posBuffer = plr.Character.HumanoidRootPart.Position,
+				}
+				plr.Character.AncestryChanged:Once(function()
+					lastPositions[plr.Character] = nil
+				end)
+			end
+			
+			lastPositions[plr.Character].old = lastPositions[plr.Character].posBuffer
+			lastPositions[plr.Character].posBuffer = plr.Character.HumanoidRootPart.Position
 		end
 	end
-end)
-
--- Disable Player Collisions
-for _,v in Character:GetChildren() do
-	if v:IsA("BasePart") then
-		v.CanCollide = false
-		v.Massless = true
-	end
-end
-
--- Additional stuff
-Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
-Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-Humanoid.PlatformStand = true
-
-local studsPerSecond = getgenv().killAllStudsPerSecond
-local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-while task.wait(0.06) and not Character:FindFirstChild("Dead") do
+	
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-		continue
+		return
 	end
 
 	local moveToStart = os.clock()
@@ -394,7 +395,7 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 	local ignore = nil
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
 		local tHumanoidRootPart = target.HumanoidRootPart
-		
+
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
 			ignore = target
@@ -410,9 +411,9 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 				break
 			end
 		end
-		
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target])*getDataPing()*1.1 or tHumanoidRootPart.Position
-		
+
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/dT*getDataPing()*1.1 or tHumanoidRootPart.Position
+
 		pivotModelTo(
 			Character, 
 			CFrame.new(
@@ -423,19 +424,19 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			)*CFrame.Angles(math.rad(180), 0, 0),
 			true
 		)
-		
+
 		if getgenv().killAllHitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
 			ignore = target
 			break
 		end
-		
+
 		moveToTick = os.clock()
 		task.wait()
 	end
-	
+
 	if HumanoidRootPart.Position.Y < -180 then
 		pivotModelTo(Character, HumanoidRootPart.CFrame - Vector3.new(0, HumanoidRootPart.Position.Y + 100, 0), true)
 	end
-	
+
 	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position, ignore)
-end
+end)
