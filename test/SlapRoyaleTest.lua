@@ -403,7 +403,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
 			table.insert(ignores, target)
-			task.delay(1, table.remove, ignores, table.find(ignores, target))
+			task.delay(0.8, table.remove, ignores, table.find(ignores, target))
 			break
 		end
 
@@ -417,7 +417,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 		end
 
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.02) or tHumanoidRootPart.Position
 
 		pivotModelTo(
 			Character, 
@@ -430,6 +430,8 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			true
 		)
 		
+		Events.Slap:FireServer(tHumanoidRootPart)
+		
 		if getgenv().killAllHitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.4 then
 			pivotModelTo(
 				Character,
@@ -437,9 +439,8 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				true
 			)
 			table.insert(ignores, target)
-			task.delay(1, table.remove, ignores, table.find(ignores, target))
+			task.delay(0.8, table.remove, ignores, table.find(ignores, target))
 			task.wait()
-			Events.Slap:FireServer(tHumanoidRootPart)
 			break
 		end
 
