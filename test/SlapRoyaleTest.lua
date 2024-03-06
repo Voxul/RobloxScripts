@@ -454,6 +454,8 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				table.remove(ignores, table.find(ignores, target))
 			end)
 			task.wait()
+			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
+			Events.Slap:FireServer(tHumanoidRootPart)
 			break
 		end
 
