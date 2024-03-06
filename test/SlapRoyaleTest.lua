@@ -407,7 +407,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
 		local tHumanoidRootPart = target.HumanoidRootPart
 
-		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
+		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+1 or os.clock()-moveToStart > 8 then
 			warn("Target timed out!")
 			table.insert(ignores, target)
 			task.delay(0.8, function()
