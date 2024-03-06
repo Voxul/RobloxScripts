@@ -70,7 +70,7 @@ end
 
 -- Disable barriers
 if getgenv().disableBarriers then
-	print("Disabling Barriers/Hazards")
+	print("Disable Barriers/Hazards")
 	
 	local function disableTouch(part:BasePart)
 		part.CanTouch = false
@@ -92,7 +92,7 @@ if getgenv().disableBarriers then
 end
 
 if getgenv().hideCharacterInLobby and workspace:FindFirstChild("Lobby") then
-	print("Lobby Hider")
+	print("Hiding LocalPlayer in lobby")
 	local ogCFrame = HumanoidRootPart.CFrame
 	while workspace:FindFirstChild("Lobby") and task.wait() do
 		pivotModelTo(Character, ogCFrame + Vector3.new(math.random(), 150, math.random()), true)
@@ -143,6 +143,19 @@ end
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
 local healingItems = {"Apple", "Bandage", "Boba", "First Aid Kit", "Forcefield Crystal", "Healing Brew", "Healing Potion"}
 
+local function heal()
+	print("Healing...")
+	for _,v in LocalPlr.Backpack:GetChildren() do
+		if v:IsA("Tool") and table.find(healingItems, v.Name) then
+			Humanoid:EquipTool(v)
+			v:Activate()
+
+			task.wait(getDataPing()+0.05)
+			if Humanoid.Health >= getgenv().healthOk or Character:FindFirstChild("Dead") then break end
+		end
+	end
+end
+
 if getgenv().safetyHeal then
 	local debounce = false
 	Humanoid.HealthChanged:Connect(function(health)
@@ -150,17 +163,7 @@ if getgenv().safetyHeal then
 		if health > getgenv().healthLow then return end 
 
 		debounce = true
-
-		for _,v in LocalPlr.Backpack:GetChildren() do
-			if v:IsA("Tool") and table.find(healingItems, v.Name) then
-				Humanoid:EquipTool(v)
-				v:Activate()
-
-				task.wait(getDataPing()+0.05)
-				if Humanoid.Health >= getgenv().healthOk or Character:FindFirstChild("Dead") then break end
-			end
-		end
-
+		heal()
 		debounce = false
 	end)
 end
@@ -177,8 +180,9 @@ if getgenv().bombBus then
 			
 			bombsExploded += 1
 			if bombsExploded%4 == 3 and getgenv().safetyHeal then
-				task.wait(getDataPing()+0.05)
+				heal()
 			end
+			task.wait()
 		end
 	end
 	
@@ -208,6 +212,7 @@ if getgenv().permaTruePower then
 end
 
 if getgenv().usePermaItems then
+	print("Using all permanent items")
 	task.spawn(function()
 		if gloveName == "Pack-A-Punch" then
 			repeat task.wait() until LocalPlr.Backpack:FindFirstChild("Pack-A-Punch") or Character:FindFirstChild("Pack-A-Punch")
@@ -224,6 +229,7 @@ if getgenv().usePermaItems then
 end
 
 if getgenv().useIceCubes then
+	print("Using all ice cubes")
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Cube of Ice" then
 			Humanoid:EquipTool(v)
@@ -233,6 +239,7 @@ if getgenv().useIceCubes then
 end
 
 if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
+	print("Instant Bus Jump")
 	while Character.Ragdolled.Value or getgenv().busJumpLegitMode and LocalPlr.PlayerGui:FindFirstChild("JumpPrompt") do
 		task.wait()
 	end
