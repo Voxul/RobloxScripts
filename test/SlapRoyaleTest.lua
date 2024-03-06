@@ -402,6 +402,8 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 		continue
 	end
+	
+	print(target.Name)
 
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
