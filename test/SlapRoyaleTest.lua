@@ -462,6 +462,11 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 
 	if HumanoidRootPart.Position.Y < -180 then
 		pivotModelTo(Character, HumanoidRootPart.CFrame - Vector3.new(0, HumanoidRootPart.Position.Y + 100, 0), true)
+		-- attempt countermeasures against other exploiters
+		table.insert(ignores, target)
+		task.delay(0.8, function()
+			table.remove(ignores, table.find(ignores, target))
+		end)
 	end
 
 	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
