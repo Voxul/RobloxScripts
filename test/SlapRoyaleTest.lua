@@ -403,7 +403,9 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+2 then
 			warn("Target timed out!")
 			table.insert(ignores, target)
-			task.delay(0.8, table.remove, ignores, table.find(ignores, target))
+			task.delay(0.8, function()
+				table.remove(ignores, table.find(ignores, target))
+			end)
 			break
 		end
 
@@ -439,7 +441,9 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				true
 			)
 			table.insert(ignores, target)
-			task.delay(0.8, table.remove, ignores, table.find(ignores, target))
+			task.delay(0.8, function()
+				table.remove(ignores, table.find(ignores, target))
+			end)
 			task.wait()
 			break
 		end
