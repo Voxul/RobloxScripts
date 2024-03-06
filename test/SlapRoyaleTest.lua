@@ -223,6 +223,7 @@ if getgenv().usePermaItems then
 			if v:IsA("Tool") and table.find(permanentItems, v.Name) then
 				Humanoid:EquipTool(v)
 				v:Activate()
+				task.wait()
 			end
 		end
 	end)
@@ -234,6 +235,7 @@ if getgenv().useIceCubes then
 		if v:IsA("Tool") and v.Name == "Cube of Ice" then
 			Humanoid:EquipTool(v)
 			v:Activate()
+			task.wait()
 		end
 	end
 end
@@ -417,17 +419,16 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		end
 		
 		-- Attempt annoying bug fix
-		if Character:FindFirstChild(gloveName) then
-			Humanoid:EquipTool(Character[gloveName])
-		elseif LocalPlr.Backpack:FindFirstChild(gloveName) then
+		if not Character:FindFirstChild(gloveName) then
+			if not LocalPlr.Backpack:FindFirstChild(gloveName) then
+				warn("Glove Missing!")
+				task.wait(0.5)
+				break
+			end
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
-		else
-			warn("Glove Not Found!")
-			task.wait(0.5)
-			break
 		end
 
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*getDataPing() or tHumanoidRootPart.Position
+		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
 
 		pivotModelTo(
 			Character, 
@@ -451,8 +452,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				table.remove(ignores, table.find(ignores, target))
 			end)
 			task.wait()
-			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
-			Events.Slap:FireServer(tHumanoidRootPart)
 			break
 		end
 
