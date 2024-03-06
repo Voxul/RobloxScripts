@@ -415,15 +415,16 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end)
 			break
 		end
-
-		if not Character:FindFirstChild(gloveName) then
-			if LocalPlr.Backpack:FindFirstChild(gloveName) then
-				Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
-			else
-				warn("Glove Not Found!")
-				task.wait(0.5)
-				break
-			end
+		
+		-- Attempt annoying bug fix
+		if Character:FindFirstChild(gloveName) then
+			Humanoid:EquipTool(Character[gloveName])
+		elseif LocalPlr.Backpack:FindFirstChild(gloveName) then
+			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
+		else
+			warn("Glove Not Found!")
+			task.wait(0.5)
+			break
 		end
 
 		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*getDataPing() or tHumanoidRootPart.Position
