@@ -29,7 +29,8 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency by not waiting for the client to know if the target got hit
 	getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
 	getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
-	getgenv().killAllGliderLagAdjustmentOnly = true -- Only adjust for lag if the target is gliding
+	getgenv().killAllGliderLagAdjustmentOnly = false -- Only adjust for lag if the target is gliding
+	getgenv().killAllLagAdjustmentStudsAheadActivation = 5 -- How many studs the target is estimated to be ahead to trigger lag adjustment
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -400,6 +401,7 @@ end)
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local lagAdjust = getgenv().killAllLagAdjustmentEnabled
 local gliderAdjustOnly = getgenv().killAllGliderLagAdjustmentOnly
+local studsAheadActivation = getgenv().killAllLagAdjustmentStudsAheadActivation
 
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
@@ -425,7 +427,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			break
 		end
 		
-		-- Attempt annoying bug fix
 		if not Character:FindFirstChild(gloveName) then
 			if not LocalPlr.Backpack:FindFirstChild(gloveName) then
 				warn("Glove Missing!")
@@ -434,10 +435,17 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 		end
-
-		local targetPosition = (lagAdjust and (gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly) -- If lag adjust is enabled and: [1] glider-only is enabled and target has glider or [2] glider-only is not enabled
-		) and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) -- If lag adjustment enabled
-			or tHumanoidRootPart.Position -- else
+		
+		local targetPosition = tHumanoidRootPart.Position
+		if lagAdjust then
+			local lagAhead:Vector3 = (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
+			
+			if lagAhead > studsAheadActivation then
+				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
+					targetPosition += tHumanoidRootPart.Position + lagAhead
+				end
+			end
+		end
 
 		pivotModelTo(
 			Character, 
