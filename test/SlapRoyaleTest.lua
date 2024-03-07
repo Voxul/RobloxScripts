@@ -29,6 +29,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency by not waiting for the client to know if the target got hit
 	getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
 	getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
+	getgenv().killAllGliderLagAdjustmentOnly = true -- Only adjust for lag if the target is gliding
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -430,7 +431,11 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 		end
 
-		local targetPosition = getgenv().killAllLagAdjustmentEnabled and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) or tHumanoidRootPart.Position
+		local targetPosition = (getgenv().killAllLagAdjustmentEnabled 
+			and (target:FindFirstChild("Glider") and getgenv().killAllGliderLagAdjustmentOnly
+			or not getgenv().killAllGliderLagAdjustmentOnly)
+		) and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) -- If lag adjustment enabled
+			or tHumanoidRootPart.Position -- else
 
 		pivotModelTo(
 			Character, 
