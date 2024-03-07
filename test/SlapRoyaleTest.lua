@@ -443,7 +443,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			
 			if lagAhead.Magnitude > studsAheadActivation then
 				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
-					targetPosition += tHumanoidRootPart.Position + lagAhead
+					targetPosition += lagAhead
 				end
 			end
 		end
