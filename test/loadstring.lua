@@ -10,7 +10,7 @@ getgenv().itemVacEnabled = true
 getgenv().bombBus = true
 getgenv().permaTruePower = true -- Activates when you have 2 or more True Powers
 getgenv().usePermaItems = true -- Automatically use permanent items
-getgenv().useIceCubes = false -- Automatically use ice cubes to allow killAll/kill aura oneshots for a few hits
+getgenv().useIceCubes = true -- Automatically use ice cubes to allow killAll/kill aura oneshots for a few hits
 
 getgenv().instantBusJump = true
 getgenv().busJumpLegitMode = false -- Waits for the jump prompt to appear
@@ -26,7 +26,8 @@ getgenv().killAllStudsPerSecond = 440 -- How fast to go towards targets
 getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency by not waiting for the client to know if the target got hit
 getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
 getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
-getgenv().killAllGliderLagAdjustmentOnly = true -- Only adjust for lag if the target is gliding
+getgenv().killAllGliderLagAdjustmentOnly = false -- Only adjust for lag if the target is gliding
+getgenv().killAllLagAdjustmentStudsAheadActivation = 5 -- How many studs the target is estimated to be ahead to trigger lag adjustment
 
 -- DO NOT TOUCH
 getgenv().SRCheatConfigured = true; loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Voxul/RobloxScripts/main/test/SlapRoyaleTest.lua'))()
