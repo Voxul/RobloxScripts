@@ -106,39 +106,47 @@ if workspace:FindFirstChild("Lobby") then
 end
 HumanoidRootPart.Anchored = false
 
+local function safeEquipTool(tool:Tool, activate:boolean?, immediateUnequip:boolean?)
+	if tool:FindFirstChild("Handle") then
+		for _,v in tool:GetDescendants() do
+			if v:IsA("BasePart") then
+				v.Massless = true
+				v.Anchored = false
+			end
+		end
+		tool.PrimaryPart = tool.PrimaryPart or tool.Handle
+		pivotModelTo(tool, HumanoidRootPart.CFrame, true)
+	end
+	pcall(Humanoid.EquipTool, Humanoid, tool)
+	if activate then tool:Activate() end
+	if immediateUnequip then Humanoid:UnequipTools() end
+end
+
 if getgenv().itemVacEnabled then
 	print("Item Vacuuming")
 
 	-- Pick up dropped items
 	local function pickUpTool(v:Tool)
-		if v:IsA("Tool") and v:FindFirstChild("Handle") then
-			v.Handle.Massless = true
-			v.Handle.Anchored = false
-			v.Handle.CFrame = HumanoidRootPart.CFrame
-
-			Humanoid:EquipTool(v)
-			Humanoid:UnequipTools()
-			
-			v.AncestryChanged:Connect(function(_, p)
-				if p ~= Character then return end
-				print("Auto-activate "..v.Name)
-				task.defer(v.Activate, v)
+		if v:IsA("Tool") then
+			v.Equipped:Once(function()
+				v.AncestryChanged:Connect(function(_,p)
+					if p ~= Character then return end
+					print("Auto-activate "..v.Name)
+					task.defer(v.Activate, v)
+				end)
 			end)
+			
+			safeEquipTool(v, false, true)
 		end
 	end
 	
 	workspace.Items.ChildAdded:Connect(pickUpTool)
 
-	HumanoidRootPart.Anchored = true
 	for _,v in workspace.Items:GetChildren() do
-		pickUpTool(v)
+		safeEquipTool(v, false, true)
 	end
-
-	Humanoid:UnequipTools()
-	task.wait(getDataPing())
-	HumanoidRootPart.Anchored = false
 	
-	task.wait(0.2+getDataPing())
+	task.wait(getDataPing()*2)
 end
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
@@ -148,8 +156,7 @@ local function heal()
 	print("Healing...")
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and table.find(healingItems, v.Name) then
-			Humanoid:EquipTool(v)
-			v:Activate()
+			safeEquipTool(v, true)
 
 			task.wait(getDataPing()+0.05)
 			if Humanoid.Health >= getgenv().healthOk or Character:FindFirstChild("Dead") then break end
@@ -176,8 +183,7 @@ if getgenv().bombBus then
 	local bombsExploded = 0
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
-			Humanoid:EquipTool(v)
-			v:Activate()
+			safeEquipTool(v, true)
 			
 			bombsExploded += 1
 			if bombsExploded%4 == 3 and getgenv().safetyHeal then
@@ -197,11 +203,9 @@ if getgenv().permaTruePower then
 			if firstTruePower then
 				print("2 True Powers found!")
 
-				Humanoid:EquipTool(firstTruePower)
-				firstTruePower:Activate()
+				safeEquipTool(firstTruePower, true)
 				task.wait(0.3 + getDataPing())
-				Humanoid:EquipTool(v)
-				v:Activate()
+				safeEquipTool(v, true)
 
 				task.wait(5.2 + getDataPing())
 				break
@@ -222,8 +226,7 @@ if getgenv().usePermaItems then
 
 		for _,v in LocalPlr.Backpack:GetChildren() do
 			if v:IsA("Tool") and table.find(permanentItems, v.Name) then
-				Humanoid:EquipTool(v)
-				v:Activate()
+				safeEquipTool(v, true)
 				task.wait()
 			end
 		end
@@ -234,8 +237,7 @@ if getgenv().useIceCubes then
 	print("Using all ice cubes")
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Cube of Ice" then
-			Humanoid:EquipTool(v)
-			v:Activate()
+			safeEquipTool(v, true)
 			task.wait()
 		end
 	end
