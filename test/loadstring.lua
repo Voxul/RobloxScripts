@@ -27,7 +27,7 @@ getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency by not wai
 getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
 getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
 getgenv().killAllGliderLagAdjustmentOnly = false -- Only adjust for lag if the target is gliding
-getgenv().killAllLagAdjustmentStudsAheadActivation = 5 -- How many studs the target is estimated to be ahead to trigger lag adjustment
+getgenv().killAllLagAdjustmentStudsAheadActivation = 6 -- How many studs the target is estimated to be ahead to trigger lag adjustment
 
 -- DO NOT TOUCH
 getgenv().SRCheatConfigured = true; loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/Voxul/RobloxScripts/main/test/SlapRoyaleTest.lua'))()
