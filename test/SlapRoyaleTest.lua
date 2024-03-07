@@ -129,7 +129,7 @@ if getgenv().itemVacEnabled then
 	local function pickUpTool(v:Tool)
 		if v:IsA("Tool") then
 			safeEquipTool(v, false, true)
-			v.AncestryChanged:Once(function()
+			v.Equipped:Once(function()
 				v.AncestryChanged:Connect(function(_,p)
 					if p ~= Character then return end
 					print("Auto-activate "..v.Name)
@@ -142,7 +142,7 @@ if getgenv().itemVacEnabled then
 	workspace.Items.ChildAdded:Connect(pickUpTool)
 
 	for _,v in workspace.Items:GetChildren() do
-		safeEquipTool(v, false, true)
+		pickUpTool(v)
 	end
 	
 	task.wait(getDataPing()*2)
