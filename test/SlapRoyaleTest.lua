@@ -397,6 +397,9 @@ RunService.Heartbeat:Connect(function(dT)
 end)
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
+local lagAdjust = getgenv().killAllLagAdjustmentEnabled
+local gliderAdjustOnly = getgenv().killAllGliderLagAdjustmentOnly
+
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
@@ -404,7 +407,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		continue
 	end
 	
-	print(target.Name)
+	print(target.Name, distance)
 
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
@@ -431,9 +434,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 		end
 
-		local targetPosition = (getgenv().killAllLagAdjustmentEnabled 
-			and (target:FindFirstChild("Glider") and getgenv().killAllGliderLagAdjustmentOnly
-			or not getgenv().killAllGliderLagAdjustmentOnly)
+		local targetPosition = (lagAdjust and (gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly) -- If lag adjust is enabled and: [1] glider-only is enabled and target has glider or [2] glider-only is not enabled
 		) and tHumanoidRootPart.Position + (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05) -- If lag adjustment enabled
 			or tHumanoidRootPart.Position -- else
 
