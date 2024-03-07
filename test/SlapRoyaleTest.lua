@@ -439,7 +439,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		
 		local targetPosition = tHumanoidRootPart.Position
 		if lagAdjust then
-			local lagAhead:Vector3 = (tHumanoidRootPart.Position-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
+			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
 			
 			if lagAhead.Magnitude > studsAheadActivation then
 				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
