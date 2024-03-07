@@ -189,7 +189,6 @@ if getgenv().bombBus then
 			if bombsExploded%4 == 3 and getgenv().safetyHeal then
 				heal()
 			end
-			task.wait()
 		end
 	end
 	
