@@ -30,7 +30,7 @@ if not getgenv().SRCheatConfigured then
 	getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
 	getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
 	getgenv().killAllGliderLagAdjustmentOnly = false -- Only adjust for lag if the target is gliding
-	getgenv().killAllLagAdjustmentStudsAheadActivation = 5 -- How many studs the target is estimated to be ahead to trigger lag adjustment
+	getgenv().killAllLagAdjustmentStudsAheadActivation = 6 -- How many studs the target is estimated to be ahead to trigger lag adjustment
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -401,6 +401,7 @@ RunService.Heartbeat:Connect(function(dT)
 end)
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
+local optimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local gliderAdjustOnly = getgenv().killAllGliderLagAdjustmentOnly
 local studsAheadActivation = getgenv().killAllLagAdjustmentStudsAheadActivation
 
@@ -459,7 +460,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			true
 		)
 		
-		if getgenv().killAllHitOptimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.4 then
+		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
 			pivotModelTo(
 				Character,
 				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
