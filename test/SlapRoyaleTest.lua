@@ -128,15 +128,14 @@ if getgenv().itemVacEnabled then
 	-- Pick up dropped items
 	local function pickUpTool(v:Tool)
 		if v:IsA("Tool") then
-			v.Equipped:Once(function()
+			safeEquipTool(v, false, true)
+			v.AncestryChanged:Once(function()
 				v.AncestryChanged:Connect(function(_,p)
 					if p ~= Character then return end
 					print("Auto-activate "..v.Name)
 					task.defer(v.Activate, v)
 				end)
 			end)
-			
-			safeEquipTool(v, false, true)
 		end
 	end
 	
