@@ -368,6 +368,8 @@ for _,v in Character:GetChildren() do
 	end
 end
 
+local lagAdjust = getgenv().killAllLagAdjustmentEnabled
+
 local lastPositions = {}
 local lastDelta = 1
 RunService.Heartbeat:Connect(function(dT)
@@ -382,7 +384,7 @@ RunService.Heartbeat:Connect(function(dT)
 			Events.Slap:FireServer(char.HumanoidRootPart)
 		end
 
-		if getgenv().killAllLagAdjustmentEnabled then
+		if lagAdjust then
 			if not lastPositions[char] then
 				lastPositions[char] = {
 					posBuffer = char.HumanoidRootPart.Position,
@@ -399,7 +401,6 @@ RunService.Heartbeat:Connect(function(dT)
 end)
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
-local lagAdjust = getgenv().killAllLagAdjustmentEnabled
 local gliderAdjustOnly = getgenv().killAllGliderLagAdjustmentOnly
 local studsAheadActivation = getgenv().killAllLagAdjustmentStudsAheadActivation
 
