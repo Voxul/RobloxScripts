@@ -8,6 +8,8 @@ if not getgenv().SRCheatConfigured then
 	
 	getgenv().hideCharacterInLobby = true -- Useful for evading noobs yelling at you
 	
+	getgenv().autoVotekick = true -- Votekicks a random player at the start of the match
+	
 	getgenv().itemVacEnabled = true
 
 	getgenv().bombBus = true
@@ -107,6 +109,16 @@ if workspace:FindFirstChild("Lobby") then
 	workspace.Lobby.AncestryChanged:Wait()
 end
 HumanoidRootPart.Anchored = false
+
+if getgenv().autoVotekick then
+	local players = Players:GetPlayers()
+	table.remove(players, table.find(players, LocalPlr))
+	local selected = players[math.random(1, #players)].Name
+	print("Votekicking "..selected)
+	
+	Events.Votekick:FireServer(selected, false, 2)
+	Events.Votekick:FireServer(selected, true, true)
+end
 
 local function safeEquipTool(tool:Tool, activate:boolean?, immediateUnequip:boolean?)
 	if tool:FindFirstChild("Handle") then
