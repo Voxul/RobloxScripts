@@ -304,7 +304,7 @@ local function canHitChar(char:Model)
 	end
 
 	-- Additional checks
-	if char.Ragdolled.Value or not char.Vulnerable.Value or getgenv().killAllIgnoreGliders and char:FindFirstChild("Glider") then 
+	if char.Ragdolled.Value or not char.Vulnerable.Value or getgenv().killAllIgnoreGliders and char:FindFirstChild("Glider") or char.Head.Transparency == 1 and not char:FindFirstChildWhichIsA("Tool") and not Players:GetPlayerFromCharacter(char).Backpack:FindFirstChildWhichIsA("Tool") then 
 		return false 
 	end
 
