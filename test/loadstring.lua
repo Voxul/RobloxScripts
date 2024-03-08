@@ -5,6 +5,8 @@ getgenv().hazardCollision = true -- Whether the hazard should be solid
 
 getgenv().hideCharacterInLobby = true -- Useful for evading noobs yelling at you
 
+getgenv().autoVotekick = true -- Votekicks a random player at the start of the match
+
 getgenv().itemVacEnabled = true
 
 getgenv().bombBus = true
