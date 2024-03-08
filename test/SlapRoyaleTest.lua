@@ -472,28 +472,16 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				table.remove(ignores, table.find(ignores, target))
 			end)
 			
-			pivotModelTo(
-				Character,
-				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
-				true
-			)
-			
-			-- Check line of sight
-			local lineOfSight = workspace:Raycast(HumanoidRootPart.Position, tHumanoidRootPart.Position-HumanoidRootPart.Position, lOSParams)
-			
-			if lineOfSight and lineOfSight.Instance and not lineOfSight.Instance:IsDescendantOf(target) then
-				local elapsedStart = os.clock()
-				while task.wait() and os.clock()-elapsedStart < 0.08 do
-					pivotModelTo(
-						Character,
-						CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
-						true
-					)
-				end
+			local elapsedStart = os.clock()
+			while task.wait() and os.clock()-elapsedStart < 0.06 and canHitChar(target) do
+				pivotModelTo(
+					Character,
+					CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
+					true
+				)
+				Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
+				Events.Slap:FireServer(tHumanoidRootPart)
 			end
-			
-			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
-			Events.Slap:FireServer(tHumanoidRootPart)
 		
 			break
 		end
