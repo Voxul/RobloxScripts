@@ -466,6 +466,11 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		)
 		
 		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 1 then
+			table.insert(ignores, target)
+			task.delay(0.8, function()
+				table.remove(ignores, table.find(ignores, target))
+			end)
+			
 			pivotModelTo(
 				Character,
 				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
@@ -475,12 +480,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			-- Check line of sight
 			local lineOfSight = workspace:Raycast(HumanoidRootPart.Position, tHumanoidRootPart.Position-HumanoidRootPart.Position, lOSParams)
 			
-			if not lineOfSight or lineOfSight.Instance and lineOfSight.Instance:IsDescendantOf(target) then
-				table.insert(ignores, target)
-				task.delay(0.8, function()
-					table.remove(ignores, table.find(ignores, target))
-				end)
-			else -- Something is in the way
+			if lineOfSight and lineOfSight.Instance and not lineOfSight.Instance:IsDescendantOf(target) then
 				local elapsedStart = os.clock()
 				while task.wait() and os.clock()-elapsedStart < 0.08 do
 					pivotModelTo(
