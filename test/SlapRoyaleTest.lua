@@ -420,7 +420,7 @@ local Vect3_XZ = Vector3.new(1,0,1)
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
-		local originalY = HumanoidRootPart.Position.Y
+		local originalY = math.abs(HumanoidRootPart.Position.Y)
 		
 		while not target and task.wait() do
 			target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
