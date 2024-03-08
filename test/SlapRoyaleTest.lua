@@ -360,9 +360,10 @@ Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 Humanoid.PlatformStand = true
 
 -- Disable Player Collisions
-for _,v in Character:GetChildren() do
+for _,v in Character:GetDescendants() do
 	if v:IsA("BasePart") then
 		v.CanCollide = false
+		v.CanTouch = false
 		v.Massless = true
 	end
 end
@@ -464,7 +465,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			true
 		)
 		
-		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 2 then
+		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 1 then
 			pivotModelTo(
 				Character,
 				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
@@ -472,7 +473,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			)
 			
 			-- Check line of sight
-			local lineOfSight = workspace:Raycast(HumanoidRootPart.Position, (targetPosition-HumanoidRootPart.Position), lOSParams)
+			local lineOfSight = workspace:Raycast(HumanoidRootPart.Position, tHumanoidRootPart.Position-HumanoidRootPart.Position, lOSParams)
 			
 			if not lineOfSight or lineOfSight.Instance and lineOfSight.Instance:IsDescendantOf(target) then
 				table.insert(ignores, target)
@@ -480,12 +481,14 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 					table.remove(ignores, table.find(ignores, target))
 				end)
 			else -- Something is in the way
-				task.wait(0.06)
-				pivotModelTo(
-					Character,
-					CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
-					true
-				)
+				local elapsedStart = os.clock()
+				while task.wait() and os.clock()-elapsedStart < 0.08 do
+					pivotModelTo(
+						Character,
+						CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
+						true
+					)
+				end
 			end
 			
 			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
