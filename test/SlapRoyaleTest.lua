@@ -434,17 +434,18 @@ local Vect3_XZ = Vector3.new(1,0,1)
 local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
-		local originalY = HumanoidRootPart.Position.Y
+		local movementTick = os.clock()
 		
 		while not target and task.wait() do
 			target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 			pivotModelTo(
 				Character, 
 				CFrame.new(
-					HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(originalY-HumanoidRootPart.Position.Y) * lastDelta, 1))
+					HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(HumanoidRootPart.Position.Y)*(os.clock()-movementTick), 1))
 				)*CFrame.Angles(math.rad(180), 0, 0),
 				true
 			)
+			movementTick = os.clock()
 		end
 	end
 	
