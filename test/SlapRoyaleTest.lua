@@ -377,6 +377,8 @@ RunService.Heartbeat:Connect(function(dT)
 	lastDelta = dT
 	
 	for _,plr in Players:GetPlayers() do
+		if plr == LocalPlr then continue end
+		
 		local char = plr.Character
 		if not char or not char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Dead") then continue end
 
