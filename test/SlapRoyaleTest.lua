@@ -399,6 +399,11 @@ RunService.Heartbeat:Connect(function(dT)
 	end
 end)
 
+local lOSParams = RaycastParams.new()
+lOSParams.FilterType = Enum.RaycastFilterType.Exclude
+lOSParams.IgnoreWater = true
+lOSParams.FilterDescendantsInstances = {workspace.Terrain}
+
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local optimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local gliderAdjustOnly = getgenv().killAllGliderLagAdjustmentOnly
@@ -459,19 +464,33 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			true
 		)
 		
-		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 0.5 then
+		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < 2 then
 			pivotModelTo(
 				Character,
 				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
 				true
 			)
-			table.insert(ignores, target)
-			task.delay(0.8, function()
-				table.remove(ignores, table.find(ignores, target))
-			end)
-			task.wait()
+			
+			-- Check line of sight
+			local lineOfSight = workspace:Raycast(HumanoidRootPart.Position, (targetPosition-HumanoidRootPart.Position), lOSParams)
+			
+			if not lineOfSight or lineOfSight.Instance and lineOfSight.Instance:IsDescendantOf(target) then
+				table.insert(ignores, target)
+				task.delay(0.8, function()
+					table.remove(ignores, table.find(ignores, target))
+				end)
+			else -- Something is in the way
+				task.wait(0.06)
+				pivotModelTo(
+					Character,
+					CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
+					true
+				)
+			end
+			
 			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
 			Events.Slap:FireServer(tHumanoidRootPart)
+		
 			break
 		end
 
