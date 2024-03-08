@@ -403,7 +403,7 @@ end)
 local lOSParams = RaycastParams.new()
 lOSParams.FilterType = Enum.RaycastFilterType.Exclude
 lOSParams.IgnoreWater = true
-lOSParams.FilterDescendantsInstances = {workspace.Terrain}
+lOSParams.FilterDescendantsInstances = {}
 
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local optimizationEnabled = getgenv().killAllHitOptimizationEnabled
