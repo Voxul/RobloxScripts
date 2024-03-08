@@ -441,7 +441,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			pivotModelTo(
 				Character, 
 				CFrame.new(
-					HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(originalY-HumanoidRootPart.Position) * lastDelta, 1))
+					HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(originalY-HumanoidRootPart.Position.Y) * lastDelta, 1))
 				)*CFrame.Angles(math.rad(180), 0, 0),
 				true
 			)
