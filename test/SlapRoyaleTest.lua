@@ -406,6 +406,8 @@ lOSParams.FilterType = Enum.RaycastFilterType.Exclude
 lOSParams.IgnoreWater = true
 lOSParams.FilterDescendantsInstances = {}
 
+local Vect3_XZ = Vector3.new(1,0,1)
+
 local studsPerSecond = getgenv().killAllStudsPerSecond
 local optimizationEnabled = getgenv().killAllHitOptimizationEnabled
 local gliderAdjustOnly = getgenv().killAllGliderLagAdjustmentOnly
@@ -415,6 +417,13 @@ local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 while task.wait() and not Character:FindFirstChild("Dead") do
 	if not target then
 		target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
+		
+		pivotModelTo(
+			Character, 
+			CFrame.new(HumanoidRootPart.Position.X, 0, HumanoidRootPart.Position.Z)*CFrame.Angles(math.rad(180), 0, 0),
+			true
+		)
+		
 		continue
 	end
 	
@@ -450,7 +459,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			
 			if lagAhead.Magnitude > studsAheadActivation then
 				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
-					targetPosition += lagAhead
+					targetPosition += Vector3.new(lagAhead.X, math.max(lagAhead.Y, -6), lagAhead.Z)
 				end
 			end
 		end
