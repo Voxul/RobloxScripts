@@ -431,38 +431,56 @@ local studsAheadActivation = getgenv().killAllLagAdjustmentStudsAheadActivation
 
 local Vect3_XZ = Vector3.new(1,0,1)
 
-local target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
+local target, distance
+local function refreshTarget()
+	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
+end
+
+local function ignoreTarget(target:Model)
+	table.insert(ignores, target)
+	task.delay(0.8, function()
+		table.remove(ignores, table.find(ignores, target))
+	end)
+end
+
+local yZeroTick = os.clock()
 while task.wait() and not Character:FindFirstChild("Dead") do
+	refreshTarget()
+	
 	if not target then
-		local movementTick = os.clock()
-		
-		while not target and task.wait() do
-			target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
-			pivotModelTo(
-				Character, 
-				CFrame.new(
-					HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(HumanoidRootPart.Position.Y)*(os.clock()-movementTick), 1))
-				)*CFrame.Angles(math.rad(180), 0, 0),
-				true
-			)
-			movementTick = os.clock()
-		end
+		pivotModelTo(
+			Character, 
+			CFrame.new(
+				HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(HumanoidRootPart.Position.Y)*(os.clock()-yZeroTick), 1))
+			)*CFrame.Angles(math.rad(180), 0, 0),
+			true
+		)
+		yZeroTick = os.clock()
+		continue
 	end
+	yZeroTick = os.clock()
 	
 	print(target.Name, distance)
 
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
-	
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
 		local tHumanoidRootPart = target.HumanoidRootPart
+		
+		local targetPosition = tHumanoidRootPart.Position
+		if lagAdjust then
+			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
 
-		if os.clock()-moveToStart > distance/studsPerSecond+getDataPing()+1 or os.clock()-moveToStart > 8 then
+			if lagAhead.Magnitude > studsAheadActivation then
+				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
+					targetPosition += Vector3.new(lagAhead.X, math.max(lagAhead.Y, -6), lagAhead.Z)
+				end
+			end
+		end
+		
+		if os.clock()-moveToStart > distance/studsPerSecond+1 or os.clock()-moveToStart > 8 then
 			warn("Target timed out!")
-			table.insert(ignores, target)
-			task.delay(0.8, function()
-				table.remove(ignores, table.find(ignores, target))
-			end)
+			ignoreTarget(target)
 			break
 		end
 		
@@ -474,18 +492,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 		end
-		
-		local targetPosition = tHumanoidRootPart.Position
-		if lagAdjust then
-			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
-			
-			if lagAhead.Magnitude > studsAheadActivation then
-				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
-					targetPosition += Vector3.new(lagAhead.X, math.max(lagAhead.Y, -6), lagAhead.Z)
-				end
-			end
-		end
-
 		pivotModelTo(
 			Character, 
 			CFrame.new(
@@ -498,11 +504,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		)
 		
 		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < getgenv().killAllOptimizationActivationDistance then
-			table.insert(ignores, target)
-			task.delay(0.8, function()
-				table.remove(ignores, table.find(ignores, target))
-			end)
-			
 			local elapsedStart = os.clock()
 			while task.wait() and os.clock()-elapsedStart < 0.06 and canHitChar(target) do
 				pivotModelTo(
@@ -513,13 +514,11 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
 				Events.Slap:FireServer(tHumanoidRootPart)
 			end
-		
+			ignoreTarget(target)
 			break
 		end
 
 		moveToTick = os.clock()
 		task.wait()
 	end
-
-	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
 end
