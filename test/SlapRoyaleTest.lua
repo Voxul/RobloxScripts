@@ -117,6 +117,7 @@ if getgenv().autoVotekick then
 	print("Votekicking "..selected)
 	
 	Events.Votekick:FireServer(selected, false, 2)
+	task.wait()
 	Events.Votekick:FireServer(selected, true, true)
 end
 
@@ -161,7 +162,7 @@ if getgenv().itemVacEnabled then
 	
 	local toolWaitStart = os.clock()
 	while os.clock()-toolWaitStart < 3 and not LocalPlr.Backpack:FindFirstChildWhichIsA("Tool") do task.wait(getDataPing()) end
-	task.wait(getDataPing())
+	task.wait(getDataPing()*2)
 end
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
@@ -172,7 +173,6 @@ local function heal()
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and table.find(healingItems, v.Name) then
 			safeEquipTool(v, true)
-
 			task.wait(getDataPing()+0.05)
 			if Humanoid.Health >= getgenv().healthOk or Character:FindFirstChild("Dead") then break end
 		end
@@ -243,6 +243,7 @@ if getgenv().usePermaItems then
 			end
 		end
 	end)
+	
 	LocalPlr.Backpack.ChildAdded:Connect(function(v)
 		if v:IsA("Tool") and table.find(permanentItems, v.Name) then
 			safeEquipTool(v, true)
@@ -456,7 +457,7 @@ local function ignoreTarget(target:Model)
 end
 
 
-while task.wait(0.06) and not Character:FindFirstChild("Dead") do
+while task.wait() and not Character:FindFirstChild("Dead") do
 	refreshTarget()
 	
 	if not target then
@@ -485,6 +486,17 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 			break
 		end
 		
+		local targetPosition = tHumanoidRootPart.Position
+		if lagAdjust then
+			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*getDataPing()
+
+			if lagAhead.Magnitude > studsAheadActivation then
+				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
+					targetPosition += Vector3.new(lagAhead.X, math.clamp(lagAhead.Y, -6, 8), lagAhead.Z)
+				end
+			end
+		end
+		
 		if not Character:FindFirstChild(gloveName) then
 			if not LocalPlr.Backpack:FindFirstChild(gloveName) then
 				warn("Glove Missing!")
@@ -492,17 +504,6 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 				break
 			end
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
-		end
-		
-		local targetPosition = tHumanoidRootPart.Position
-		if lagAdjust then
-			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
-
-			if lagAhead.Magnitude > studsAheadActivation then
-				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
-					targetPosition += Vector3.new(lagAhead.X, math.clamp(lagAhead.Y, -6, 6), lagAhead.Z)
-				end
-			end
 		end
 		
 		pivotModelTo(
@@ -517,17 +518,23 @@ while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 		)
 		
 		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < getgenv().killAllOptimizationActivationDistance then
-			pivotModelTo(
-				Character,
-				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
-				true
-			)
-			
-			task.wait()
-			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
-			Events.Slap:FireServer(tHumanoidRootPart)
+			local lineOfSightRay = workspace:Raycast(HumanoidRootPart.Position, (tHumanoidRootPart.Position-HumanoidRootPart.Position), lOSParams)
 			
 			ignoreTarget(target)
+			if lineOfSightRay and lineOfSightRay.Instance and lineOfSightRay.Instance:IsDescendantOf(target) then
+				break
+			end
+			
+			local elapsedStart = os.clock()
+			while task.wait() and os.clock()-elapsedStart < 0.08 and canHitChar(target) do
+				pivotModelTo(
+					Character,
+					CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
+					true
+				)
+				Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
+				Events.Slap:FireServer(tHumanoidRootPart)
+			end
 			break
 		end
 
