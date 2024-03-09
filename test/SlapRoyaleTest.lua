@@ -478,7 +478,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 	local moveToStart = os.clock()
 	local moveToTick = os.clock()
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
-		local tHumanoidRootPart = target.HumanoidRootPart
+		local tHumanoidRootPart:Part = target.HumanoidRootPart
 		
 		if os.clock()-moveToStart > distance/studsPerSecond+1 or os.clock()-moveToStart > 8 then
 			warn("Target timed out!")
@@ -518,11 +518,16 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		)
 		
 		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < getgenv().killAllOptimizationActivationDistance then
-			local lineOfSightRay = workspace:Raycast(HumanoidRootPart.Position, (tHumanoidRootPart.Position-HumanoidRootPart.Position), lOSParams)
-			
 			ignoreTarget(target)
-			if lineOfSightRay and lineOfSightRay.Instance and lineOfSightRay.Instance:IsDescendantOf(target) and not target:FindFirstChild("Glider") then
-				break
+			if not target:FindFirstChild("Glider") then
+				lOSParams.FilterDescendantsInstances = {Character}
+				local losTo = workspace:Raycast(HumanoidRootPart.Position, (tHumanoidRootPart.Position-HumanoidRootPart.Position), lOSParams)
+				lOSParams.FilterDescendantsInstances = {target}
+				local losFrom = workspace:Raycast(tHumanoidRootPart.Position, (HumanoidRootPart.Position-tHumanoidRootPart.Position), lOSParams)
+				
+				if losTo and losTo.Instance:IsDescendantOf(target) and losFrom and losFrom.Instance:IsDescendantOf(Character) then
+					break
+				end
 			end
 			
 			local elapsedStart = os.clock()
