@@ -488,7 +488,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		
 		local targetPosition = tHumanoidRootPart.Position
 		if lagAdjust then
-			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*getDataPing()
+			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.02)
 
 			if lagAhead.Magnitude > studsAheadActivation then
 				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
@@ -521,7 +521,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			local lineOfSightRay = workspace:Raycast(HumanoidRootPart.Position, (tHumanoidRootPart.Position-HumanoidRootPart.Position), lOSParams)
 			
 			ignoreTarget(target)
-			if lineOfSightRay and lineOfSightRay.Instance and lineOfSightRay.Instance:IsDescendantOf(target) then
+			if lineOfSightRay and lineOfSightRay.Instance and lineOfSightRay.Instance:IsDescendantOf(target) and not target:FindFirstChild("Glider") then
 				break
 			end
 			
