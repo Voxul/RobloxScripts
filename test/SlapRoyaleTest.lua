@@ -431,6 +431,8 @@ local studsAheadActivation = getgenv().killAllLagAdjustmentStudsAheadActivation
 
 local Vect3_XZ = Vector3.new(1,0,1)
 
+local yZeroTick = os.clock()
+
 local target, distance
 local function refreshTarget()
 	target, distance = getClosestHittableCharacter(HumanoidRootPart.Position)
@@ -441,9 +443,10 @@ local function ignoreTarget(target:Model)
 	task.delay(0.8, function()
 		table.remove(ignores, table.find(ignores, target))
 	end)
+	yZeroTick = os.clock()
 end
 
-local yZeroTick = os.clock()
+
 while task.wait() and not Character:FindFirstChild("Dead") do
 	refreshTarget()
 	
@@ -519,6 +522,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		end
 
 		moveToTick = os.clock()
+		yZeroTick = os.clock()
 		task.wait()
 	end
 end
