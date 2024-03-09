@@ -456,7 +456,7 @@ local function ignoreTarget(target:Model)
 end
 
 
-while task.wait() and not Character:FindFirstChild("Dead") do
+while task.wait(0.06) and not Character:FindFirstChild("Dead") do
 	refreshTarget()
 	
 	if not target then
@@ -479,17 +479,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 	while canHitChar(target) and not Character:FindFirstChild("Dead") do
 		local tHumanoidRootPart = target.HumanoidRootPart
 		
-		local targetPosition = tHumanoidRootPart.Position
-		if lagAdjust then
-			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
-
-			if lagAhead.Magnitude > studsAheadActivation then
-				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
-					targetPosition += Vector3.new(lagAhead.X, math.max(lagAhead.Y, -6), lagAhead.Z)
-				end
-			end
-		end
-		
 		if os.clock()-moveToStart > distance/studsPerSecond+1 or os.clock()-moveToStart > 8 then
 			warn("Target timed out!")
 			ignoreTarget(target)
@@ -504,6 +493,18 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			end
 			Humanoid:EquipTool(LocalPlr.Backpack[gloveName])
 		end
+		
+		local targetPosition = tHumanoidRootPart.Position
+		if lagAdjust then
+			local lagAhead:Vector3 = (targetPosition-lastPositions[target].old)/lastDelta*(getDataPing()+0.05)
+
+			if lagAhead.Magnitude > studsAheadActivation then
+				if gliderAdjustOnly and target:FindFirstChild("Glider") or not gliderAdjustOnly then
+					targetPosition += Vector3.new(lagAhead.X, math.clamp(lagAhead.Y, -6, 6), lagAhead.Z)
+				end
+			end
+		end
+		
 		pivotModelTo(
 			Character, 
 			CFrame.new(
@@ -516,16 +517,16 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		)
 		
 		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < getgenv().killAllOptimizationActivationDistance then
-			local elapsedStart = os.clock()
-			while task.wait() and os.clock()-elapsedStart < 0.06 and canHitChar(target) do
-				pivotModelTo(
-					Character,
-					CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
-					true
-				)
-				Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
-				Events.Slap:FireServer(tHumanoidRootPart)
-			end
+			pivotModelTo(
+				Character,
+				CFrame.new(targetPosition)*CFrame.Angles(math.rad(180), 0, 0),
+				true
+			)
+			
+			task.wait()
+			Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
+			Events.Slap:FireServer(tHumanoidRootPart)
+			
 			ignoreTarget(target)
 			break
 		end
