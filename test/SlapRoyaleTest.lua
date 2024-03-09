@@ -159,8 +159,8 @@ if getgenv().itemVacEnabled then
 		pickUpTool(v)
 	end
 	
-	local pingSleepStart = os.clock()
-	while os.clock()-pingSleepStart < getDataPing()*2 do task.wait(getDataPing()) end
+	local toolWaitStart = os.clock()
+	while os.clock()-toolWaitStart < 3 and not LocalPlr.Backpack:FindFirstChildWhichIsA("Tool") do task.wait(getDataPing()) end
 	task.wait(getDataPing())
 end
 
