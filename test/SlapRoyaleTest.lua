@@ -159,7 +159,8 @@ if getgenv().itemVacEnabled then
 		pickUpTool(v)
 	end
 	
-	task.wait(getDataPing()*2)
+	local pingSleepStart = os.clock()
+	while os.clock()-pingSleepStart < getDataPing()*2 do task.wait() end
 end
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
@@ -192,7 +193,6 @@ end
 local gloveName = LocalPlr.Glove.Value
 if getgenv().bombBus then
 	print("bababooey")
-	
 	local bombsExploded = 0
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Bomb" then
