@@ -161,6 +161,7 @@ if getgenv().itemVacEnabled then
 	
 	local pingSleepStart = os.clock()
 	while os.clock()-pingSleepStart < getDataPing()*2 do task.wait(getDataPing()) end
+	task.wait(getDataPing())
 end
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
