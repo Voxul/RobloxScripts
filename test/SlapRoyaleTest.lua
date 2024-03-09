@@ -160,7 +160,7 @@ if getgenv().itemVacEnabled then
 	end
 	
 	local pingSleepStart = os.clock()
-	while os.clock()-pingSleepStart < getDataPing()*2 do task.wait() end
+	while os.clock()-pingSleepStart < getDataPing()*2 do task.wait(getDataPing()) end
 end
 
 local permanentItems = {"Boba", "Bull's essence", "Frog Brew", "Frog Potion", "Potion of Strength", "Speed Brew", "Speed Potion", "Strength Brew"}
@@ -239,8 +239,12 @@ if getgenv().usePermaItems then
 		for _,v in LocalPlr.Backpack:GetChildren() do
 			if v:IsA("Tool") and table.find(permanentItems, v.Name) then
 				safeEquipTool(v, true)
-				task.wait()
 			end
+		end
+	end)
+	LocalPlr.Backpack.ChildAdded:Connect(function(v)
+		if v:IsA("Tool") and table.find(permanentItems, v.Name) then
+			safeEquipTool(v, true)
 		end
 	end)
 end
@@ -250,9 +254,13 @@ if getgenv().useIceCubes then
 	for _,v in LocalPlr.Backpack:GetChildren() do
 		if v:IsA("Tool") and v.Name == "Cube of Ice" then
 			safeEquipTool(v, true)
-			task.wait()
 		end
 	end
+	LocalPlr.Backpack.ChildAdded:Connect(function(v)
+		if v:IsA("Tool") and v.Name == "Cube of Ice" then
+			safeEquipTool(v, true)
+		end
+	end)
 end
 
 if getgenv().instantBusJump and not LocalPlr.Backpack:FindFirstChild(gloveName) and not Character:FindFirstChild(gloveName) and not LocalPlr.Backpack:FindFirstChild("Glider") and not Character:FindFirstChild("Glider") then
