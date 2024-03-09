@@ -24,12 +24,12 @@ getgenv().healthOk = 80 -- How much to heal until
 
 getgenv().killAll = true
 getgenv().killAllInitDelay = 1 -- How long to wait before starting
-getgenv().killAllStudsPerSecond = 440 -- How fast to go towards targets
+getgenv().killAllStudsPerSecond = 420 -- How fast to go towards targets
 getgenv().killAllHitOptimizationEnabled = true -- Improves efficiency by not waiting for the client to know if the target got hit
 getgenv().killAllOptimizationActivationDistance = 3
 getgenv().killAllIgnoreGliders = false -- Ignore targets if they are gliding
 getgenv().killAllLagAdjustmentEnabled = true -- Determines whether or not to adjust for lag (useful for attacking gliders)
-getgenv().killAllGliderLagAdjustmentOnly = false -- Only adjust for lag if the target is gliding
+getgenv().killAllGliderLagAdjustmentOnly = true -- Only adjust for lag if the target is gliding
 getgenv().killAllLagAdjustmentStudsAheadActivation = 8 -- How many studs the target is estimated to be ahead to trigger lag adjustment
 
 -- DO NOT TOUCH
