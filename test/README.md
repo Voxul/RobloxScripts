@@ -1,26 +1,23 @@
-# VOXUL Slap Royale Exploit Testing <sub>GUI still not public</sub>
-> Voxul aims to provide the best and most powerful exploits available.
+# SR Exploit Testing
+> [!NOTE]
+> The Voxul GUI is currently not available for the public
 
-## Current Features:
-- Anti-Acid/Anti-Lava/Anti-Barrier
-  - Touch disable Mode
-  - Hazard CanCollide Mode <sub>(so you can walk on it)</sub>
-- Lobby Player Hider <sub>(hides you when in lobby)</sub>
-- Item Vacuum <sub>NOT patched, still works!</sub>
-  - Also steals any dropped items <sub>(witch brews, etc)</sub>
-- Bus bomb
-- Auto permanent true power
-- Auto use permanent items
-- Auto use ice cubes
-- Instant Bus Jump
-  - Instant Land Mode <sub>(teleports you to the ground)</sub>
-  - Legit Mode <sub>(waits until a normal jump is possible)</sub>
-- Auto-Heal <sub>(heals you automatically on low HP)</sub>
-  - Configurable trigger health value
-  - Configurable safe health value
-- Kill All (OP) <sub>(recommend to use item vac with this)</sub>
-  - Configurable move speed
-  - Bunch of configurable optimization settings
+Feature List:
+- Anti-Barrier <sub>(getgenv().disableBarriers)</sub>
+  - Configurable Hazard Collision <sub>(getgenv().hazardCollision)</sub>
+- Lobby Hider <sub>(getgenv().hideCharacterInLobby)</sub>
+- Auto-Votekick <sub>(getgenv().autoVotekick)</sub>
+- Item Vac <sub>(getgenv().itemVacEnabled)</sub>
+- Auto-Bomb <sub>(getgenv().bombBus)</sub>
+- Auto Permanent True Power <sub>(getgenv().permaTruePower)</sub>
+- Auto Use Permanent Items <sub>(getgenv().usePermaItems)</sub>
+- Auto Ice Cube <sub>(getgenv().useIceCubes)</sub>
+- Auto Bus Jump <sub>(getgenv().instantBusJump)</sub>
+  - Legit Mode <sub>(getgenv().busJumpLegitMode)</sub>
+  - Instant Land Toggle <sub>(getgenv().instantLand)</sub>
+- Auto-Heal <sub>(getgenv().safetyHeal)</sub>
+  - Configurable Critical & Safe Limits <sub>(getgenv().healthLow & getgenv().healthOk)</sub>
+- Auto-Win <sub>(getgenv().killAll)</sub>
+  - Multiple configurable optimization/misc settings
 
-## Execution Instruct:
-go to the loadstring file and copy it into your executor, you can change the getgenv() settings (do not touch getgenv().SRCheatConfigured)
+All of the features listed above can only be edited in the loadstring script
