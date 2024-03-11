@@ -518,7 +518,6 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 		)
 		
 		if optimizationEnabled and (HumanoidRootPart.Position-targetPosition).Magnitude < getgenv().killAllOptimizationActivationDistance then
-			ignoreTarget(target)
 			if not target:FindFirstChild("Glider") then
 				lOSParams.FilterDescendantsInstances = {Character}
 				local losTo = workspace:Raycast(HumanoidRootPart.Position, (tHumanoidRootPart.Position-HumanoidRootPart.Position), lOSParams)
@@ -540,6 +539,8 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 				Events.Slap:FireServer(getModelClosestChild(target, HumanoidRootPart.Position))
 				Events.Slap:FireServer(tHumanoidRootPart)
 			end
+			
+			ignoreTarget(target)
 			break
 		end
 
