@@ -462,7 +462,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 	
 	if not target then
 		pivotModelTo(
-			Character, 
+			Character,
 			CFrame.new(
 				HumanoidRootPart.Position:Lerp(HumanoidRootPart.Position*Vect3_XZ, math.min(studsPerSecond/math.abs(HumanoidRootPart.Position.Y)*(os.clock()-yZeroTick), 1))
 			)*CFrame.Angles(math.rad(180), 0, 0),
@@ -521,7 +521,7 @@ while task.wait() and not Character:FindFirstChild("Dead") do
 			if not target:FindFirstChild("Glider") then
 				lOSParams.FilterDescendantsInstances = {Character}
 				local losTo = workspace:Raycast(HumanoidRootPart.Position, (tHumanoidRootPart.Position-HumanoidRootPart.Position), lOSParams)
-				lOSParams.FilterDescendantsInstances = {target}
+				lOSParams.FilterDescendantsInstances = {target, workspace.Terrain}
 				local losFrom = workspace:Raycast(tHumanoidRootPart.Position, (HumanoidRootPart.Position-tHumanoidRootPart.Position), lOSParams)
 				
 				if losTo and losTo.Instance:IsDescendantOf(target) and losFrom and losFrom.Instance:IsDescendantOf(Character) then
