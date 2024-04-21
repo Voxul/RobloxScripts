@@ -36,7 +36,7 @@ end)
 queue_on_teleport("getgenv().TargetSlaps = "..(getgenv().TargetSlaps or "1000")..";"..readfile("Voxul_SlappleFarm.txt"))
 
 while not completed do task.wait() end
-if identifyexecutor and identifyexecutor():lower():find("codex") then game:GetService("ContentProvider"):PreloadAsync({game:GetService("CoreGui"):WaitForChild("Codex")});task.wait(0.5) end
+if identifyexecutor and identifyexecutor():lower():find("codex") then game:GetService("ContentProvider"):PreloadAsync({game:GetService("CoreGui"), game:GetService("CoreGui"):WaitForChild("Codex"), game:GetService("CoreGui"):WaitForChild("gui")});task.wait(0.6) end
 
 if serverList[1] then
 	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, serverList[math.random(1, #serverList)])
