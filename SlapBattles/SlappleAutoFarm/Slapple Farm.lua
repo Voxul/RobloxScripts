@@ -1,5 +1,5 @@
 local LocalPlayer = game:GetService("Players").LocalPlayer
-if LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Slaps").Value >= getgenv().TargetSlaps or 1000 then
+if LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Slaps").Value >= (getgenv().TargetSlaps or 1000) then
 	return
 end
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
