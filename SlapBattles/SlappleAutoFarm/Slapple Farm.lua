@@ -1,4 +1,3 @@
-local link = "https://github.com/Voxul/RobloxScripts/raw/main/SlapBattles/SlappleAutoFarm/Slapple%20Farm.lua"
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
@@ -21,7 +20,6 @@ for _,v:Model in workspace.Arena.island5.Slapples:GetChildren() do
 end
 
 local serverList, completed = {}, false
--- perform two HTTP GET at same time
 task.spawn(function()
 	for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/6403373529/servers/Public?sortOrder=Asc&limit=100")).data) do
 		if v.playing and type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
@@ -31,7 +29,7 @@ task.spawn(function()
 	completed = true
 end)
 
-queue_on_teleport("getgenv().TargetSlaps = "..getgenv().TargetSlaps..";"..game:HttpGet(""))
+queue_on_teleport("getgenv().TargetSlaps = "..getgenv().TargetSlaps..";"..readfile("Voxul_SlappleFarm"))
 
 while not completed do task.wait() end
 
