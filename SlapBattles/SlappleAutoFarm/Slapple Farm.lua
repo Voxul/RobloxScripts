@@ -9,7 +9,7 @@ local function touchPart(p:BasePart,oP:BasePart--[[,s:boolean?,d:number?]])
 	--[[firetouchinterest(p,oP,s or 0)
 	if d then task.wait(d) end
 	if not s then firetouchinterest(p,oP,1) end]]
-	p.CFrame = oP.CFrame -- because codex is a piece of shit that can't have working firetouchinterest
+	p.CFrame = oP.CFrame -- because codex just can't have working firetouchinterest
 end
 
 while not Character:FindFirstChild("entered") do
@@ -36,6 +36,7 @@ end)
 queue_on_teleport("getgenv().TargetSlaps = "..(getgenv().TargetSlaps or "1000")..";"..readfile("Voxul_SlappleFarm.txt"))
 
 while not completed do task.wait() end
+if identifyexecutor and identifyexecutor():lower():find("codex") then game:GetService("ContentProvider"):PreloadAsync({game:GetService("CoreGui"):WaitForChild("Codex")});task.wait(0.5) end
 
 if serverList[1] then
 	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, serverList[math.random(1, #serverList)])
