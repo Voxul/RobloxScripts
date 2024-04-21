@@ -29,7 +29,7 @@ task.spawn(function()
 	completed = true
 end)
 
-queue_on_teleport("getgenv().TargetSlaps = "..getgenv().TargetSlaps..";"..readfile("Voxul_SlappleFarm"))
+queue_on_teleport("getgenv().TargetSlaps = "..getgenv().TargetSlaps..";"..readfile("Voxul_SlappleFarm.txt"))
 
 while not completed do task.wait() end
 
