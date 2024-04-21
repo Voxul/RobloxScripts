@@ -1,3 +1,4 @@
+local link = "https://github.com/Voxul/RobloxScripts/raw/main/SlapBattles/SlappleAutoFarm/Slapple%20Farm.lua"
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRM = Character:WaitForChild("HRM")
@@ -30,7 +31,7 @@ task.spawn(function()
 	completed = true
 end)
 
-queue_on_teleport("getgenv().TargetSlaps = "..getgenv().TargetSlaps..";"..game:HttpGet(""))
+queue_on_teleport("getgenv().TargetSlaps = "..getgenv().TargetSlaps..";"..game:HttpGet(link))
 
 while not completed do task.wait() end
 
