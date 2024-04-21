@@ -1,3 +1,4 @@
+--!optimize 2
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
@@ -6,6 +7,7 @@ local function touchPart(p:BasePart,oP:BasePart,s:boolean?,d:number?)
 	firetouchinterest(p,oP,s or 0)
 	if d then task.wait(d) end
 	if not s then firetouchinterest(p,oP,1) end
+	p.CFrame = oP.CFrame -- because codex is a piece of shit that can't have working firetouchinterest
 end
 
 while not Character:FindFirstChild("entered") do
