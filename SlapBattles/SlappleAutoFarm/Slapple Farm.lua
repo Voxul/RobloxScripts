@@ -1,12 +1,14 @@
---!optimize 2
 local LocalPlayer = game:GetService("Players").LocalPlayer
+if LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Slaps").Value >= getgenv().TargetSlaps or 1000 then
+	return
+end
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
 
-local function touchPart(p:BasePart,oP:BasePart,s:boolean?,d:number?)
-	firetouchinterest(p,oP,s or 0)
+local function touchPart(p:BasePart,oP:BasePart--[[,s:boolean?,d:number?]])
+	--[[firetouchinterest(p,oP,s or 0)
 	if d then task.wait(d) end
-	if not s then firetouchinterest(p,oP,1) end
+	if not s then firetouchinterest(p,oP,1) end]]
 	p.CFrame = oP.CFrame -- because codex is a piece of shit that can't have working firetouchinterest
 end
 
@@ -23,7 +25,7 @@ end
 
 local serverList, completed = {}, false
 task.spawn(function()
-	for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/6403373529/servers/Public?sortOrder=Asc&limit=100")).data) do
+	for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/6403373529/servers/Public?sortOrder=Asc&limit=100")).data) do
 		if v.playing and type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
 			table.insert(serverList,v.id)
 		end
